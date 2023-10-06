@@ -5,5 +5,6 @@
 4. Please follow the complete installation guide in the link https://dev.to/deadwin19/how-to-install-hyperledger-fabric-v24-on-ubuntu-2004-236f
 5. Also refer this official documentation to understand the installation process. https://hyperledger-fabric.readthedocs.io/en/release-2.5/getting_started.html
 6. Refer this official documentation for understanding how test network is designed and what arguments to pass when running brahma.sh file. https://hyperledger-fabric.readthedocs.io/en/release-2.5/tutorials.html
-7. This project is implemented using fabric-ca crypto tool only. it uses raft consensus mechanism and it contains only two organisations with two peers each.
-8. For further updates on the project stay tuned.
+7. Follow the couchDB turial for deploying smart contracts and other features https://hyperledger-fabric.readthedocs.io/en/release-2.2/couchdb_tutorial.html
+8. This project is implemented using fabric-ca crypto tool only. it uses raft consensus mechanism and it contains only two organisations with two peers each.
+9. For further updates on the project stay tuned.
