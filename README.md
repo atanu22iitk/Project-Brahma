@@ -9,3 +9,11 @@
 8. Follow the couchDB turial for deploying smart contracts and other features https://hyperledger-fabric.readthedocs.io/en/release-2.2/couchdb_tutorial.html
 9. This project is implemented using fabric-ca crypto tool only. it uses raft consensus mechanism and it contains only two organisations with two peers each.
 10. For further updates on the project stay tuned.
+## Installation Procedure for Hyperledger Fabric in Ubuntu
+1. Please follow the installation guide given in the link https://dev.to/deadwin19/how-to-install-hyperledger-fabric-v24-on-ubuntu-2004-236f
+2. Make sure that you have installed latest Docker and Docker-Compose
+3. Follow the procedure to install fabric 2.4.4 and fabric-ca 1.5.3
+4. After running the installation command - Download the latest release of Fabric samples, docker images, and binaries.
+      curl -sSL https://bit.ly/2ysbOFE | bash -s
+5. Go to the directory called fabric-samples. Download the 
+
