@@ -15,5 +15,5 @@
 3. Follow the procedure to install fabric 2.4.4 and fabric-ca 1.5.3
 4. After running the installation command - Download the latest release of Fabric samples, docker images, and binaries.
       curl -sSL https://bit.ly/2ysbOFE | bash -s
-5. Go to the directory called fabric-samples. Download the 
+5. Go to the directory called fabric-samples. Download the brahma-network and config-brahma folders given here in th repo and replace with test-network and c
 
