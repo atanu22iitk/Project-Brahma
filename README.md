@@ -15,5 +15,10 @@
 3. Follow the procedure to install fabric 2.4.4 and fabric-ca 1.5.3
 4. After running the installation command - Download the latest release of Fabric samples, docker images, and binaries.
       curl -sSL https://bit.ly/2ysbOFE | bash -s
-5. Go to the directory called fabric-samples. Download the brahma-network and config-brahma folders given here in th repo and replace with test-network and c
+5. Go to the directory called fabric-samples. Download the brahma-network and config-brahma folders given here in th repo and paste them inside fabric-samples directory.
+6. Go to the integrated terminal in VS Code or any code editor and move in the directory by
+         cd fabric-samples/brahma_network/
+7. Then run the following command
+         ./brahma.sh up createChannel -ca -c <channel name of your choice> -s couchdb
+8. Please note we are using Hyperledger fabric with fabric-ca crypto tool and couchdb as state database for org ledgers and states to be saved.
 
