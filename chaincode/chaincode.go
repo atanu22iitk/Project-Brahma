@@ -597,3 +597,122 @@ func (s *SmartContract) HasDoctorExists(ctx contractapi.TransactionContextInterf
 
 	return doctorJSON != nil, nil
 }
+
+/*
+	@dev function to get doctor details
+	@param doctorId - string value
+*/
+
+func (s *SmartContract) GetDoctor(ctx contractapi.TransactionContextInterface, doctorId string) (*Doctor, error) {
+	// check parameters not be empty
+	if doctorId == "" {
+		return nil, fmt.Errorf("doctorId is required")
+	}
+
+	// check doctor must exists
+	doctorExists, err := s.HasDoctorExists(ctx, doctorId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check doctor existence: %v", err)
+	} else if !doctorExists {
+		return nil, fmt.Errorf("doctor %s does not exist", doctorId)
+	}
+
+	// retrieve the doctor's current data
+	doctorJSON, err := ctx.GetStub().GetState(doctorId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read from world state: %v", err)
+	}
+	if doctorJSON == nil {
+		return nil, fmt.Errorf("doctor %s does not exist", doctorId)
+	}
+
+	// create doctor instance
+	var doctor Doctor
+	err = json.Unmarshal(doctorJSON, &doctor)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling doctor JSON: %v", err)
+	}
+
+	return &doctor, nil
+}
+
+/*
+	@dev function to get doctor status
+	@param doctorId - string value
+*/
+
+func (s *SmartContract) GetDoctorStatus(ctx contractapi.TransactionContextInterface, doctorId string) (bool, error) {
+	// check parameters not be empty
+	if doctorId == "" {
+		return false, fmt.Errorf("doctorId is required")
+	}
+
+	// check doctor must exists
+	doctorExists, err := s.HasDoctorExists(ctx, doctorId)
+	if err != nil {
+		return false, fmt.Errorf("failed to check doctor existence: %v", err)
+	} else if !doctorExists {
+		return false, fmt.Errorf("doctor %s does not exist", doctorId)
+	}
+
+	// retrieve the doctor's current data
+	doctorJSON, err := ctx.GetStub().GetState(doctorId)
+	if err != nil {
+		return false, fmt.Errorf("failed to read from world state: %v", err)
+	}
+	if doctorJSON == nil {
+		return false, fmt.Errorf("doctor %s does not exist", doctorId)
+	}
+
+	// create doctor instance
+	var doctor Doctor
+	err = json.Unmarshal(doctorJSON, &doctor)
+	if err != nil {
+		return false, fmt.Errorf("error unmarshalling doctor JSON: %v", err)
+	}
+
+	return doctor.DoctorStatus, nil
+}
+
+/*
+	@dev function to get doctor service no. (number)
+	@param doctorId - string value
+*/
+
+func (s *SmartContract) GetDoctorServiceNo(ctx contractapi.TransactionContextInterface, doctorId string) (bool, error) {
+	// check parameters not be empty
+	if doctorId == "" {
+		return false, fmt.Errorf("doctorId is required")
+	}
+
+	// check doctor must exists
+	doctorExists, err := s.HasDoctorExists(ctx, doctorId)
+	if err != nil {
+		return false, fmt.Errorf("failed to check doctor existence: %v", err)
+	} else if !doctorExists {
+		return false, fmt.Errorf("doctor %s does not exist", doctorId)
+	}
+
+	// retrieve the doctor's current data
+	doctorJSON, err := ctx.GetStub().GetState(doctorId)
+	if err != nil {
+		return false, fmt.Errorf("failed to read from world state: %v", err)
+	}
+	if doctorJSON == nil {
+		return false, fmt.Errorf("doctor %s does not exist", doctorId)
+	}
+
+	// create doctor instance
+	var doctor Doctor
+	err = json.Unmarshal(doctorJSON, &doctor)
+	if err != nil {
+		return false, fmt.Errorf("error unmarshalling doctor JSON: %v", err)
+	}
+
+	serviceNo, err := doctor.ServiceNo
+	if err != nil {
+		return false, fmt.Errorf("error unmarshalling doctor JSON: %v", err)
+    }
+
+	return serviceNo, nil
+}
