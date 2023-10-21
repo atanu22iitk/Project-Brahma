@@ -11,45 +11,45 @@ type SmartContract struct {
 }
 
 type Hospital struct {
-	HospitalId byte   `json:"hospitalId"`
-	Doctors    []byte `json:"doctors"`
-	Staffs     []byte `json:"staff"`
-	Patients   []byte `json:"patients"`
+	HospitalId string   `json:"HospitalId"`
+	Doctors    []string `json:"Doctors"`
+	Staffs     []string `json:"Staff"`
+	Patients   []string `json:"Patients"`
 }
 
 type Doctor struct {
-	HospitalId   byte `json:"hospitalId"`
-	DoctorId     byte `json:"doctorId"`
-	ServiceNo    byte `json:"serviceNo"`
-	DoctorStatus bool `json:"doctorStatus"`
+	HospitalId   string `json:"HospitalId"`
+	DoctorId     string `json:"DoctorId"`
+	ServiceNo    string `json:"ServiceNo"`
+	DoctorStatus bool   `json:"DoctorStatus"`
 }
 
 type Staff struct {
-	HospitalId  byte `json:"hospitalId"`
-	StaffId     byte `json:"staffId"`
-	ServiceNo   byte `json:"serviceNo"`
-	StaffStatus bool `json:"staffStatus"`
+	HospitalId  string `json:"HospitalId"`
+	StaffId     string `json:"StaffId"`
+	ServiceNo   string `json:"ServiceNo"`
+	StaffStatus bool   `json:"StaffStatus"`
 }
 
 type Patient struct {
-	HospitalId    byte   `json:"hospitalId"`
-	PatientId     byte   `json:"patientId"`
-	ServiceNo     byte   `json:"serviceNo"`
-	HealthRecords []byte `json:"healthRecord"`
+	HospitalId    string   `json:"HospitalId"`
+	PatientId     string   `json:"PatientId"`
+	ServiceNo     string   `json:"ServiceNo"`
+	HealthRecords []string `json:"HealthRecord"`
 }
 
 type HealthRecord struct {
-	DoctorsId   []byte `json:"doctorId"`
-	StaffsId    []byte `json:"staffId"`
-	PatientId   byte   `json:"patientId"`
-	Description byte   `json:"description"`
-	Reports     []byte `json:"report"`
-	CurrentTime string `json:"currentTime"`
+	DoctorsId   []string `json:"DoctorId"`
+	StaffsId    []string `json:"StaffId"`
+	PatientId   string   `json:"PatientId"`
+	Description string   `json:"Description"`
+	Reports     []string `json:"Report"`
+	CurrentTime string   `json:"CurrentTime"`
 }
 
 type Report struct {
-	HealthRecordId byte   `json:"healthRecord"`
-	ReportId       byte   `json:"reportId"`
-	Description    byte   `json:"description"`
-	CurrentTime    string `json:"currentTime"`
+	HealthRecordId string `json:"HealthRecord"`
+	ReportId       string `json:"ReportId"`
+	Description    string `json:"Description"`
+	CurrentTime    string `json:"CurrentTime"`
 }
