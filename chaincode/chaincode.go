@@ -365,3 +365,235 @@ func (s *SmartContract) GetPatientsByHospital(ctx contractapi.TransactionContext
 
 	return patients, nil
 }
+
+// #######################################################################################################
+// ###################################### DOCTOR OPERATIONS ######################################
+// #######################################################################################################
+
+/*
+	@dev function to create a new doctor
+	@param hospitalId - string value
+	@param doctorId - string value
+	@param serviceNo - string value
+*/
+
+func (s *SmartContract) AddDoctor(ctx contractapi.TransactionContextInterface, hospitalId string, doctorId string, serviceNo string) error {
+	// check parameters not be empty
+	if hospitalId == "" || doctorId == "" || serviceNo == "" {
+		return fmt.Errorf("hospitalId, doctorId and serviceNo are required")
+	}
+
+	// check if hospital must exists
+	if hospitalExists, err := s.HasHospitalExists(ctx, hospitalId); err != nil {
+		return fmt.Errorf("failed to check hospital existence: %v", err)
+	} else if !hospitalExists {
+		return fmt.Errorf("hospital %s does not exists", hospitalId)
+	}
+
+	// check if doctor already not exists
+	if doctorExists, err := s.HasDoctorExists(ctx, doctorId); err != nil {
+		return fmt.Errorf("failed to check doctor existence: %v", err)
+	} else if doctorExists {
+		return fmt.Errorf("doctor %s already exists", doctorId)
+	}
+
+	// create doctor instance
+	doctor := Doctor{
+		HospitalId:   hospitalId,
+		DoctorId:     doctorId,
+		ServiceNo:    serviceNo,
+		DoctorStatus: true,
+	}
+
+	// parse the doctor
+	doctorJSON, err := json.Marshal(doctor)
+	if err != nil {
+		return fmt.Errorf("error marshalling hospital record: %v", err)
+	}
+
+	// save the doctor
+	err = ctx.GetStub().PutState(doctorId, doctorJSON)
+	if err != nil {
+		return fmt.Errorf("failed to put doctor record in world state: %v", err)
+	}
+
+	// get the hospital details
+	hospitalJSON, err := ctx.GetStub().GetState(hospitalId)
+	if err != nil {
+		return fmt.Errorf("failed to read from world state: %v", err)
+	}
+	if hospitalJSON == nil {
+		return fmt.Errorf("hospital %s does not exist", hospitalId)
+	}
+
+	// create hospital instance
+	var hospital Hospital
+	err = json.Unmarshal(hospitalJSON, &hospital)
+	if err != nil {
+		return fmt.Errorf("error unmarshalling hospital record: %v", err)
+	}
+
+	// append the doctor to the doctors list
+	hospital.Doctors = append(hospital.Doctors, doctorId)
+
+	// parse updated hospital details
+	updatedHospitalJSON, err := json.Marshal(hospital)
+	if err != nil {
+		return fmt.Errorf("error marshalling updated hospital record: %v", err)
+	}
+
+	// save the updated hospital
+	return ctx.GetStub().PutState(hospitalId, updatedHospitalJSON)
+}
+
+/*
+	@dev function to update a new doctor
+	@param hospitalId - string value
+	@param doctorId - string value
+*/
+
+func (s *SmartContract) UpdateDoctor(ctx contractapi.TransactionContextInterface, hospitalId string, doctorId string) error {
+	// Input validation
+	if hospitalId == "" || doctorId == "" {
+		return fmt.Errorf("hospitalId and doctorId are required")
+	}
+
+	// Check if the hospital exists
+	hospitalExists, err := s.HasHospitalExists(ctx, hospitalId)
+	if err != nil {
+		return fmt.Errorf("failed to check hospital existence: %v", err)
+	} else if !hospitalExists {
+		return fmt.Errorf("hospital %s does not exist", hospitalId)
+	}
+
+	// Check if the doctor exists
+	doctorExists, err := s.HasDoctorExists(ctx, doctorId)
+	if err != nil {
+		return fmt.Errorf("failed to check doctor existence: %v", err)
+	} else if !doctorExists {
+		return fmt.Errorf("doctor %s does not exist", doctorId)
+	}
+
+	// Retrieve the doctor's current data
+	doctorJSON, err := ctx.GetStub().GetState(doctorId)
+	if err != nil {
+		return fmt.Errorf("failed to read doctor data from world state: %v", err)
+	} else if doctorJSON == nil {
+		return fmt.Errorf("the doctor %s does not exist", doctorId)
+	}
+
+	var doctor Doctor
+	err = json.Unmarshal(doctorJSON, &doctor)
+	if err != nil {
+		return fmt.Errorf("error unmarshalling doctor JSON: %v", err)
+	}
+
+	// Check that the doctor is part of the hospital
+	if doctor.HospitalId != hospitalId {
+		return fmt.Errorf("doctor %s is not part of hospital %s", doctorId, hospitalId)
+	}
+
+	updatedDoctorJSON, err := json.Marshal(doctor)
+	if err != nil {
+		return fmt.Errorf("error marshalling updated doctor data: %v", err)
+	}
+
+	// Save the updated doctor
+	return ctx.GetStub().PutState(doctorId, updatedDoctorJSON)
+}
+
+/*
+	@dev function to delete a doctor
+	@param hospitalId - string value
+	@param doctorId - string value
+*/
+
+func (s *SmartContract) DeleteDoctor(ctx contractapi.TransactionContextInterface, hospitalId string, doctorId string) error {
+	// check parameters not be empty
+	if hospitalId == "" || doctorId == "" {
+		return fmt.Errorf("hospitalId and doctorId are required")
+	}
+
+	// check ospital must exists
+	if hospitalExists, err := s.HasHospitalExists(ctx, hospitalId); err != nil {
+		return fmt.Errorf("failed to check hospital existence: %v", err)
+	} else if !hospitalExists {
+		return fmt.Errorf("hospital %s does not exists", hospitalId)
+	}
+
+	// check doctor must exists
+	doctorExists, err := s.HasDoctorExists(ctx, doctorId)
+	if err != nil {
+		return fmt.Errorf("failed to check doctor existence: %v", err)
+	} else if !doctorExists {
+		return fmt.Errorf("doctor %s does not exist", doctorId)
+	}
+
+	// retrieve the doctor's current data
+	doctorJSON, err := ctx.GetStub().GetState(doctorId)
+	if err != nil {
+		return fmt.Errorf("failed to read doctor from world state: %v", err)
+	}
+	if doctorJSON == nil {
+		return fmt.Errorf("doctor %s does not exist", doctorId)
+	}
+
+	// delete doctor
+	err = ctx.GetStub().DelState(doctorId)
+	if err != nil {
+		return fmt.Errorf("failed to delete doctor %s: %v", doctorId, err)
+	}
+
+	// get the hospital details
+	hospitalJSON, err := ctx.GetStub().GetState(hospitalId)
+	if err != nil {
+		return fmt.Errorf("failed to read hospital from world state: %v", err)
+	}
+	if hospitalJSON == nil {
+		return fmt.Errorf("hospital %s does not exist", hospitalId)
+	}
+
+	// create hospital instance
+	var hospital Hospital
+	err = json.Unmarshal(hospitalJSON, &hospital)
+	if err != nil {
+		return fmt.Errorf("error unmarshalling hospital record: %v", err)
+	}
+
+	// remove the doctor from the doctors list
+	for i, docId := range hospital.Doctors {
+		if docId == doctorId {
+			hospital.Doctors = append(hospital.Doctors[:i], hospital.Doctors[i+1:]...)
+			break
+		}
+	}
+
+	// parse updated hospital details
+	updatedHospitalJSON, err := json.Marshal(hospital)
+	if err != nil {
+		return fmt.Errorf("error marshalling updated hospital record: %v", err)
+	}
+
+	// save the updated hospital
+	return ctx.GetStub().PutState(hospitalId, updatedHospitalJSON)
+}
+
+/*
+	@dev function to check has doctor exists or not
+	@param doctorId - string value
+*/
+
+func (s *SmartContract) HasDoctorExists(ctx contractapi.TransactionContextInterface, doctorId string) (bool, error) {
+	// check parameters not be empty
+	if doctorId == "" {
+		return false, fmt.Errorf("doctorId is required")
+	}
+
+	// retrieve the doctor's current data
+	doctorJSON, err := ctx.GetStub().GetState(doctorId)
+	if err != nil {
+		return false, fmt.Errorf("Failed to read doctor data from state %v", err)
+	}
+
+	return doctorJSON != nil, nil
+}
