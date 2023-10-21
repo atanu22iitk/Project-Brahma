@@ -3,6 +3,9 @@ package main
 // package chaincode
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
@@ -54,7 +57,7 @@ type Report struct {
 	CurrentTime    string `json:"CurrentTime"`
 }
 
-/ #######################################################################################################
+// #######################################################################################################
 // ###################################### HOSPITAL OPERATIONS ######################################
 // #######################################################################################################
 
@@ -165,7 +168,6 @@ func (s *SmartContract) HasHospitalExists(ctx contractapi.TransactionContextInte
 
 	return hospitalJSON != nil, nil
 }
-
 
 /*
 	@dev function to get hospital details
@@ -679,40 +681,35 @@ func (s *SmartContract) GetDoctorStatus(ctx contractapi.TransactionContextInterf
 	@param doctorId - string value
 */
 
-func (s *SmartContract) GetDoctorServiceNo(ctx contractapi.TransactionContextInterface, doctorId string) (bool, error) {
+func (s *SmartContract) GetDoctorServiceNo(ctx contractapi.TransactionContextInterface, doctorId string) (string, error) {
 	// check parameters not be empty
 	if doctorId == "" {
-		return false, fmt.Errorf("doctorId is required")
+		return "", fmt.Errorf("doctorId is required")
 	}
 
 	// check doctor must exists
 	doctorExists, err := s.HasDoctorExists(ctx, doctorId)
 	if err != nil {
-		return false, fmt.Errorf("failed to check doctor existence: %v", err)
+		return "", fmt.Errorf("failed to check doctor existence: %v", err)
 	} else if !doctorExists {
-		return false, fmt.Errorf("doctor %s does not exist", doctorId)
+		return "", fmt.Errorf("doctor %s does not exist", doctorId)
 	}
 
 	// retrieve the doctor's current data
 	doctorJSON, err := ctx.GetStub().GetState(doctorId)
 	if err != nil {
-		return false, fmt.Errorf("failed to read from world state: %v", err)
+		return "", fmt.Errorf("failed to read from world state: %v", err)
 	}
 	if doctorJSON == nil {
-		return false, fmt.Errorf("doctor %s does not exist", doctorId)
+		return "", fmt.Errorf("doctor %s does not exist", doctorId)
 	}
 
 	// create doctor instance
 	var doctor Doctor
 	err = json.Unmarshal(doctorJSON, &doctor)
 	if err != nil {
-		return false, fmt.Errorf("error unmarshalling doctor JSON: %v", err)
+		return "", fmt.Errorf("error unmarshalling doctor JSON: %v", err)
 	}
 
-	serviceNo, err := doctor.ServiceNo
-	if err != nil {
-		return false, fmt.Errorf("error unmarshalling doctor JSON: %v", err)
-    }
-
-	return serviceNo, nil
+	return doctor.ServiceNo, nil
 }
