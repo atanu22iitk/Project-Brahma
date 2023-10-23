@@ -97,4 +97,4 @@ function validatePassword(password) {
 
 const DoctorModel = mongoose.model("doctor", doctorSchema);
 
-module.exports = DoctorModel;
+module.exports = {DoctorModel};

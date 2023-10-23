@@ -1,4 +1,4 @@
-const {DoctorModel, UserModel } = require("./Model");
+const {DoctorModel } = require("./Model");
 const ErrorResponse = require("../Utils/error");
 const { generateHash, decryptHash } = require("../Utils/hash");
 const { generateDoctorId } = require("./Utils");

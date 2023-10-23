@@ -1,4 +1,4 @@
-const DoctorModel = require("./Model.js");
+const {DoctorModel} = require("./Model.js");
 
 async function generateDoctorId() {
   try {
