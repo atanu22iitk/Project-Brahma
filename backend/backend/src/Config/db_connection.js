@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose')
-const ErrorResponse = require('../Utils/error')
+const ErrorResponse = require('../Middlewares/errorHandler')
 
 const connectionParams={
     useNewUrlParser: true,

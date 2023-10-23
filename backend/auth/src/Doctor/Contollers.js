@@ -1,5 +1,5 @@
-const ErrorResponse = require("../Utils/error");
-const DoctorModel = require("./Model");
+const ErrorResponse = require("../Middlewares/errorHandler");
+const UserModel = require("../Model/Model");
 const { generateHash, decryptHash } = require("../Utils/hash");
 
 class DoctorAuthController {
@@ -11,7 +11,7 @@ class DoctorAuthController {
         return next(new ErrorResponse("All fields are required", 400));
       }
 
-      const user = await DoctorModel.findOne({ id: id });
+      const user = await UserModel.findOne({ id: id });
       if (!user) {
         return next(new ErrorResponse("User not found", 400));
       }
@@ -44,7 +44,7 @@ class DoctorAuthController {
         );
       }
 
-      const user = await DoctorModel.findOne({ id: id });
+      const user = await UserModel.findOne({ id: id });
       if (!user) {
         return next(new ErrorResponse("User not found", 400));
       }
@@ -56,15 +56,16 @@ class DoctorAuthController {
 
       const hashPassword = await generateHash(newPassword);
 
-      await DoctorModel.findByIdAndUpdate(id, {
+      await DoctorModel.findOneAndUpdate({id: user.id}, {
         $set: { password: hashPassword },
       });
+      console.log(user);
       res.send({ status: "success", message: "Password changed succesfully" });
     } catch (err) {
       next(err);
     }
   };
-  
+
 }
 
 module.exports = DoctorAuthController;
