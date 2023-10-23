@@ -7,7 +7,7 @@ const router = require("./src/app");
 
 config("dotenv");
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8000;
 mongoDbConnection();
 
 app.use(express.json());
@@ -23,5 +23,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`application listening on port http://localhost:${PORT}`);
+  console.log(`Auth server listening on port http://localhost:${PORT}`);
 });

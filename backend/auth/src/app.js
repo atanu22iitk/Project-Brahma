@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const DoctorRouter = require("./Doctor/Routes");
+const DoctorRoutes = require("./Doctor/Routes")
 
-app.use("/doctor", DoctorRouter);
+app.use('/doctor', DoctorRoutes);
 
 module.exports = app;

@@ -1,4 +1,3 @@
-const ErrorResponse = require("./error");
 const bcrypt = require("bcrypt");
 
 async function generateHash(password) {

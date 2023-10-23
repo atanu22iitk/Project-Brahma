@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose')
-const ErrorResponse = require('../utils/error')
+const ErrorResponse = require('../Utils/error')
 
 const connectionParams={
     useNewUrlParser: true,
@@ -9,7 +9,7 @@ const connectionParams={
 
 const mongoDbConnection = () => {
     try {
-        const dbConnection = mongoose.connect(process.env.MONGODB_URL,connectionParams)
+        const dbConnection = mongoose.connect(process.env.MONGODB_BACKEND_URL,connectionParams)
         console.log('Connected to database ')
         if (!dbConnection) {
             throw new ErrorResponse(500, 'Error connecting with the database');
