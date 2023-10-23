@@ -2,9 +2,14 @@ const mongoose = require("mongoose");
 const ErrorResponse = require("../utils/error");
 
 const doctorSchema = new mongoose.Schema({
+  doctorId: {
+    type: String,
+    unique: true,
+  },
   serviceNo: {
     type: String,
     required: true,
+    unique: true,
   },
   rank: {
     type: String,
@@ -27,7 +32,7 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  employedAd: {
+  employedAs: {
     type: String,
     required: true,
   },
@@ -38,6 +43,7 @@ const doctorSchema = new mongoose.Schema({
   mobileNo: {
     type: String,
     required: true,
+    unique: true,
     validate: {
       validator: function (v) {
         return validatePhoneNumber(v);
@@ -48,6 +54,7 @@ const doctorSchema = new mongoose.Schema({
   mailId: {
     type: String,
     required: true,
+    unique: true,
     validate: {
       validator: function (v) {
         return validateEmailFormat(v);
@@ -95,9 +102,9 @@ function validateEmailFormat(email) {
 
 function validatePassword(password) {
   const strongPasswordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
   return strongPasswordRegex.test(password);
 }
 
-const DoctorModel = mongoose.model("doctor", doctorSchema);
+const DoctorModel = mongoose.model("user", doctorSchema);
 module.exports = DoctorModel;
