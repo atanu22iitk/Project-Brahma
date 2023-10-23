@@ -51,9 +51,9 @@ const StaffAssignmentSchema = new mongoose.Schema({
   },
 });
 
-const MedicalStaff = mongoose.model("MedicalStaff", MedicalStaffSchema);
-const StaffAssignment = mongoose.model(
+const MedicalStaffModel = mongoose.model("MedicalStaff", MedicalStaffSchema);
+const StaffAssignedModel = mongoose.model(
   "StaffAssignment",
   StaffAssignmentSchema
 );
-module.exports = { MedicalStaff, StaffAssignment };
+module.exports = { MedicalStaffModel, StaffAssignedModel };
