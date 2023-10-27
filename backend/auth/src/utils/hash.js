@@ -1,21 +1,22 @@
 const bcrypt = require("bcrypt");
+const ErrorResponse= require("../Middlewares/errorHandler");
 
-async function generateHash(password) {
+async function generateHash(text) {
   try {
     const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
+    const hash = await bcrypt.hash(text, salt);
     return hash;
   } catch (error) {
-    new ErrorResponse("Error while generating hash", 500);
+    throw new ErrorResponse("Error while generating hash", 500);
   }
 }
 
-async function decryptHash(plaintextPassword, hashedPassword) {
+async function decryptHash(plaintext, hashText) {
   try {
-    const match = await bcrypt.compare(plaintextPassword, hashedPassword);
+    const match = await bcrypt.compare(plaintext, hashText);
     return match;
   } catch (error) {
-    new ErrorResponse("Error whiel decrypt password", 500);
+    throw new ErrorResponse("Error while decrypt text", 500);
   }
 }
 

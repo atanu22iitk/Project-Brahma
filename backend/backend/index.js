@@ -2,7 +2,7 @@ const { config } = require("dotenv");
 const express = require("express");
 const app = express();
 const mongoDbConnection = require("./src/Config/db_connection.js");
-const handleError = require("./src/Middlewares/errorHandler");
+// const handleError = require("./src/Middlewares/errorHandler");
 const router = require("./src/app");
 
 config("dotenv");
@@ -18,9 +18,9 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1", router);
 
-app.use((err, req, res, next) => {
-  handleError(err, req, res, next);
-});
+// app.use((err, req, res, next) => {
+//   handleError(err, req, res, next);
+// });
 
 app.listen(PORT, () => {
   console.log(`Backend server listening on port http://localhost:${PORT}`);

@@ -8,13 +8,12 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
-  roles: [
+  roles: 
     {
-      type: Number,
+      type: [Number],
       required: true,
       enum: Object.values(Roles),
     },
-  ],
   serviceNo: {
     type: String,
     required: true,

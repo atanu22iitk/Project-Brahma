@@ -1,23 +1,22 @@
-
+require('dotenv').config();
 const mongoose = require('mongoose')
-const ErrorResponse = require('../Utils/error')
+const {ErrorResponse} = require('../Middlewares/errorHandler');
+const MONGODB_BACKEND_DB_URL = process.env.MONGODB_BACKEND_DB_URL
 
-const connectionParams={
-    useNewUrlParser: true,
-    useUnifiedTopology: true 
-}
 
 const mongoDbConnection = () => {
     try {
-        const dbConnection = mongoose.connect(process.env.MONGODB_BACKEND_URL,connectionParams)
-        console.log('Connected to database ')
-        if (!dbConnection) {
-            throw new ErrorResponse(500, 'Error connecting with the database');
-        }
+        const dbConnectionWithBackend = mongoose.connect(MONGODB_BACKEND_DB_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true 
+        })   
+        if (!dbConnectionWithBackend) throw new ErrorResponse('Error connecting with the backend and auth database', 500);
+        console.log('Connected to backend and auth database');
+        return {dbConnectionWithBackend}
     }
     catch(err) {
-        next(err)
+        console.log(err)
     }
 }
 
-module.exports = mongoDbConnection
+module.exports = {mongoDbConnection}

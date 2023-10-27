@@ -2,6 +2,7 @@ const {DoctorModel } = require("./Model");
 const {ErrorResponse} = require("../Middlewares/errorHandler");
 const { generateHash, decryptHash } = require("../Utils/hash");
 const { generateDoctorId } = require("./Utils");
+const { v4: uuidv4 } = require('uuid');
 
 class DoctorController {
   static registerDoctor = async (req, res, next) => {
@@ -37,7 +38,7 @@ class DoctorController {
         return next(new ErrorResponse("Passwords does not match", 400));
       }
 
-      if (tc != true) {
+      if (profile.tc != true) {
         return next(new ErrorResponse("tc must be true", 400));
       }
 
@@ -46,8 +47,9 @@ class DoctorController {
       const newDoctorId = await generateDoctorId();
 
       const newDoctor = new DoctorModel({
-        id: newDoctorId,
+        id: uuidv4(),
         profile: profile,
+        roles: roles,
         serviceNo,
         rank,
         fieldOfSpecialisation,

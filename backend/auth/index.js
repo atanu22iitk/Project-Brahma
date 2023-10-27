@@ -1,8 +1,8 @@
 const { config } = require("dotenv");
 const express = require("express");
 const app = express();
-const mongoDbConnection = require("./src/config/db_connection.js");
-const handleError = require("./src/Middlewares/errorHandler.js");
+const {mongoDbConnection} = require("./src/config/db_connection.js");
+const {ErrorResponse} = require("./src/Middlewares/errorHandler.js");
 const router = require("./src/app");
 
 config("dotenv");
@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1", router);
 
 app.use((err, req, res, next) => {
-  handleError(err, req, res, next);
+  ErrorResponse.handleError(err, req, res, next);
 });
 
 app.listen(PORT, () => {
