@@ -21,4 +21,7 @@
 7. Then run the following command
          ./brahma.sh up createChannel -ca -c <channel name of your choice> -s couchdb
 8. Please note we are using Hyperledger fabric with fabric-ca crypto tool and couchdb as state database for org ledgers and states to be saved.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Command for deploying chaincode
+./brahma.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go -c brahmachannel
