@@ -41,7 +41,7 @@ class DoctorAuthController {
         );
       }
 
-      const user = await UserModel.findOne({ id: id });
+      const user = (await UserModel.findOne({ id: id })).toJSON();
       if (!user) {
         return next(new ErrorResponse("User not found", 400));
       }
@@ -53,7 +53,7 @@ class DoctorAuthController {
 
       const hashPassword = await generateHash(newPassword);
 
-      await DoctorModel.findOneAndUpdate({id: user.id}, {
+      await UserModel.findOneAndUpdate({id: user.id}, {
         $set: { 'profile.password': hashPassword },
       });
       console.log(user);
