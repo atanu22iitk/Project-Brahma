@@ -1,16 +1,27 @@
-const {DoctorModel} = require("./Model.js");
+const { DoctorModel } = require("./Model.js");
+const ErrorResponse = require("../Middlewares/errorHandler");
 
 async function generateDoctorId() {
   try {
-    const latestDoctor = await DoctorModel.findOne().sort({ _id: -1 });
-    let lastId = 0;
-    if (latestDoctor && latestDoctor.doctorId) {
-      lastId = parseInt(latestDoctor.doctorId.replace(/[^\d]/g, "")) || 0;
+    let unique = false;
+    let newDoctorId = "";
+
+    while (!unique) {
+      const latestDoctor = await DoctorModel.findOne().sort({ _id: -1 });
+      let lastId = 0;
+      if (latestDoctor && latestDoctor.doctorId) {
+        lastId = parseInt(latestDoctor.doctorId.replace(/[^\d]/g, "")) || 0;
+      }
+      newDoctorId = `DOCTOR${lastId + 1}`;
+
+      const existingDoc = await DoctorModel.findOne({ doctorId: newDoctorId });
+      if (!existingDoc) {
+        unique = true;
+      }
     }
-    return `DOCTOR${lastId + 1}`;
+    return newDoctorId;
   } catch (err) {
-    console.error("Error generating doctor ID: ", err);
-    throw new Error("Error generating doctor ID");
+    throw new ErrorResponse("Error generating doctor ID", 400);
   }
 }
 

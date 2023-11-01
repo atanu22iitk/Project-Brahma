@@ -1,8 +1,7 @@
 const {DoctorModel } = require("./Model");
-const {ErrorResponse} = require("../Middlewares/errorHandler");
-const { generateHash, decryptHash } = require("../Utils/hash");
+const ErrorResponse = require("../Middlewares/errorHandler");
+const { generateHash } = require("../Utils/hash");
 const { generateDoctorId } = require("./Utils");
-const { v4: uuidv4 } = require('uuid');
 
 class DoctorController {
   static registerDoctor = async (req, res, next) => {
@@ -19,7 +18,7 @@ class DoctorController {
 
       const user = await DoctorModel.findOne({ serviceNo: serviceNo });
       if (user) {
-        return next(new ErrorResponse("User already exists", 400));
+        return next(new ErrorResponse("Doctor already exists", 400));
       }
 
       if (
@@ -44,10 +43,9 @@ class DoctorController {
 
       const hashedPassword = await generateHash(profile.password);
       profile.password = hashedPassword;
-      const newDoctorId = await generateDoctorId();
 
       const newDoctor = new DoctorModel({
-        id: uuidv4(),
+        doctorId: await generateDoctorId(),
         profile: profile,
         roles: roles,
         serviceNo,

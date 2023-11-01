@@ -4,7 +4,7 @@ const UserSchema = require("../User/Model");
 
 const doctorSchema = new mongoose.Schema({
   profile: UserSchema,
-  id: {
+  doctorId: {
     type: String,
     unique: true,
   },
