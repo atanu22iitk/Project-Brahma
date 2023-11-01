@@ -2,10 +2,11 @@ const ErrorResponse = require("../Middlewares/errorHandler");
 const UserModel = require("../Model/Model");
 const { generateHash, decryptHash } = require("../Utils/hash");
 const {generateAccessToken, generateRefreshToken} = require("../Utils/access_token");
+const mailSender = require("../Services/mailSender");
 
 class DoctorAuthController {
 
-  // function to login doctor with id
+  // Function to login doctor with id
   static doctorLogin = async (req, res, next) => {
     try {
       const { user_type, doctorId, password } = req.body;
@@ -19,6 +20,9 @@ class DoctorAuthController {
     
       const token = await generateAccessToken(user.doctorId, user.profile.user_type, user.roles);
       const refreshToken = await generateRefreshToken(user.doctorId, user.profile.user_type, user.roles);
+
+      const mailResponse = mailSender(user.profile.mailId, 'TEST', 'TEST')
+      if(!mailResponse)return next(new ErrorResponse("Error while sending mail", 400));
 
       res.status(200).json({ success: true, data: "User login successfully", accessToken: token, refreshToken: refreshToken });
     } catch (err) {

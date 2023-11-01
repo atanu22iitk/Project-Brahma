@@ -4,6 +4,7 @@ const ErrorResponse = require("../Middlewares/errorHandler");
 const JWT_KEY = process.env.JWT_SECRET_KEY ;
 
 
+// Function to generate JWT access token
 const generateAccessToken = async (id, userType, role) => {
   if ((userType === "DOCTOR" || userType === "STAFF") && !role) {
     throw new Error("Role is required for doctors and staff");
@@ -41,6 +42,7 @@ const payload = {
   return token;
 };
 
+// Function to verify JWT access token
 const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
   console.log("verifyToken", verifyToken);
@@ -60,6 +62,7 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
+// Function to generate JWT refresh access token
 const generateRefreshToken = async (id, userType, roles = {}) => {
   if ((userType === "DOCTOR" || userType === "STAFF") && !roles) {
     throw new ErrorResponse("Role is required for doctors and staff");
