@@ -2,10 +2,9 @@ require("dotenv").config();
 const nodeMailer = require("nodemailer");
 const ErrorResponse = require("../Middlewares/errorHandler");
 
-const mailSender = (email, subject, message) => {
-
+const mailSender = async (email, subject, message) => {
   try {
-    let transporter = nodeMailer.createTransport({
+    const transporter = nodeMailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
       secure: false,
@@ -15,24 +14,19 @@ const mailSender = (email, subject, message) => {
       },
     });
 
-    let mailOptions = {
+    const mailOptions = {
       from: process.env.ADMIN_EMAIL_HOST,
       to: email,
       subject: subject,
       text: message,
     };
 
-    console.log("mailOptions", mailOptions);
-
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-  } catch (err) {
-    console.log(err);
+    let info = await transporter.sendMail(mailOptions);
+    console.log("Email sent: " + info.response);
+    return info;
+  } catch (error) {
+    console.error(error);
+    throw new ErrorResponse("Error sending email", 500);
   }
 };
 
