@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
-const profile = require("../../User/Model");
 
 const applicantSchema = new mongoose.Schema({
-  applicantId: {
-    type: String,
-    unique: true,
+  profile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user' 
   },
-  profile: profile,
   serviceNo: {
     type: String,
     required: true,

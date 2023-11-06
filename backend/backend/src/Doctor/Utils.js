@@ -12,7 +12,7 @@ async function generateDoctorId() {
       if (latestDoctor && latestDoctor.doctorId) {
         lastId = parseInt(latestDoctor.doctorId.replace(/[^\d]/g, "")) || 0;
       }
-      newDoctorId = `DOCTOR${lastId + 1}`;
+      newDoctorId = `DOC${lastId + 1}`;
 
       const existingDoc = await DoctorModel.findOne({ doctorId: newDoctorId });
       if (!existingDoc) {

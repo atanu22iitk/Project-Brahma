@@ -3,12 +3,15 @@ const USER_TYPE = require("../Utils/enums");
 
 const userSchema = new mongoose.Schema(
   {
-    user_type: {
+    userType: {
       type: Number,
       required: true,
       enum: Object.values(USER_TYPE),
     },
-
+    userId: {
+      type: String,
+      unique: true,
+    },
     firstName: {
       type: String,
       required: true,
@@ -61,8 +64,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-  },
-  { _id: false }
+  }
 );
 
 function validatePhoneNumber(phone) {
@@ -81,4 +83,5 @@ function validatePassword(password) {
   return strongPasswordRegex.test(password);
 }
 
-module.exports = userSchema ;
+const UserModel = mongoose.model("user", userSchema);
+module.exports = { UserModel, userSchema };

@@ -8,8 +8,9 @@ const Roles = {
 }
 const USER_TYPE = {
   APPLICANT: 1,
-  DOCTOR: 2,
-  STAFF: 3,
+  DEPENDENT: 2,
+  DOCTOR: 3,
+  STAFF: 4,
 }
 
 

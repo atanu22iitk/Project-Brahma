@@ -1,19 +1,16 @@
 const mongoose = require("mongoose");
 const Roles = require("../Utils/enums");
-const UserSchema = require("../User/Model");
 
 const doctorSchema = new mongoose.Schema({
-  profile: UserSchema,
-  doctorId: {
-    type: String,
-    unique: true,
+  profile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user' 
   },
-  roles: 
-    {
-      type: [Number],
-      required: true,
-      enum: Object.values(Roles),
-    },
+  roles: {
+    type: [Number],
+    required: true,
+    enum: Object.values(Roles),
+  },
   serviceNo: {
     type: String,
     required: true,
@@ -38,5 +35,4 @@ const doctorSchema = new mongoose.Schema({
 });
 
 const DoctorModel = mongoose.model("doctor", doctorSchema);
-
 module.exports = { DoctorModel };

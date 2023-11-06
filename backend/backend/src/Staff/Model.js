@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
-const profile = require("../User/Model");
 const Roles = require("../Utils/enums");
 
 const MedicalStaffSchema = new mongoose.Schema({
-  staffId: {
-    type: String,
-    unique: true,
+  profile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user' 
   },
-  profile: profile,
   roles: [
     {
       type: Number,
