@@ -10,13 +10,13 @@ const registerUser = async (id, userData) => {
       !userData.mobileNo ||
       !userData.mailId ||
       !userData.password ||
-      !userData.confirmaPassword ||
+      !userData.confirmPassword ||
       !userData.tc
     ) {
       return new ErrorResponse("User data all fields must required", 400);
     }
 
-    if (userData.password !== userData.confirmaPassword)
+    if (userData.password !== userData.confirmPassword)
       return new ErrorResponse(
         "Password and Confirm password must be same",
         400

@@ -17,6 +17,8 @@ class DoctorController {
           new ErrorResponse("Error received while return user details", 400)
         );
       }
+
+      console.log("userDetails", userDetails)
       if (
         !doctorData.roles ||
         !doctorData.serviceNo ||
