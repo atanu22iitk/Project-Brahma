@@ -33,4 +33,4 @@ const applicantSchema = new mongoose.Schema({
 });
 
 const Applicant = mongoose.model("Applicant", applicantSchema);
-module.exports = Applicant;
+module.exports = {Applicant};

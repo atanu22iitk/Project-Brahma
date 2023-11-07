@@ -1,17 +1,31 @@
-const DependentModule = require("./DependentModel");
+const DependentModel = require("./DependentModel");
+const ErrorResponse = require("../Middlewares/errorHandler");
 
 async function generateDependentId() {
-    try {
-      const latestDependent = await DependentModule.findOne().sort({ _id: -1 });
-      let lastId = 0;
-      if (latestDependent && latestDependent.dependentId) {
-        lastId = parseInt(latestDependent.dependentId.replace(/[^\d]/g, "")) || 0;
-      }
-      return `DEPENDENT${lastId + 1}`;
-    } catch (err) {
-      console.error("Error generating dependent ID: ", err);
-      throw new Error("Error generating dependent ID");
-    }
-  }
+  try {
+    let unique = false;
+    let newDependentId = "";
 
-  module.exports = { generateDependentId };
+    while (!unique) {
+      const latestDependent = await DependentModel.findOne().sort({ _id: -1 });
+      let lastId = 0;
+      if (latestDependent && latestDependent.profile.userId) {
+        lastId =
+          parseInt(latestDependent.profile.userId.replace(/[^\d]/g, "")) || 0;
+      }
+      newDependentId = `DEP${lastId + 1}`;
+
+      const existingDependent = await DependentModel.findOne({
+        "profile.userId": newDependentId,
+      });
+      if (!existingDependent) {
+        unique = true;
+      }
+    }
+    return newDependentId;
+  } catch (err) {
+    throw new ErrorResponse("Error generating dependent ID", 400);
+  }
+}
+
+module.exports = { generateDependentId };

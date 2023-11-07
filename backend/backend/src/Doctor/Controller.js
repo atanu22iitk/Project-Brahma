@@ -18,7 +18,6 @@ class DoctorController {
         );
       }
 
-      console.log("userDetails", userDetails)
       if (
         !doctorData.roles ||
         !doctorData.serviceNo ||

@@ -1,17 +1,28 @@
-const ApplicantModel = require("./ApplicantModel");
+const ApplicantModel  = require("./ApplicantModel.js");
+const ErrorResponse = require("../Middlewares/errorHandler");
 
 async function generateApplicantId() {
-    try {
+  try {
+    let unique = false;
+    let newApplicantId = "";
+
+    while (!unique) {
       const latestApplicant = await ApplicantModel.findOne().sort({ _id: -1 });
       let lastId = 0;
-      if (latestApplicant && latestApplicant.applicantId) {
-        lastId = parseInt(latestApplicant.applicantId.replace(/[^\d]/g, "")) || 0;
+      if (latestApplicant && latestApplicant.profile.userId) {
+        lastId = parseInt(latestApplicant.profile.userId.replace(/[^\d]/g, "")) || 0;
       }
-      return `APPLICANT${lastId + 1}`;
-    } catch (err) {
-      console.error("Error generating applicant ID: ", err);
-      throw new Error("Error generating applicant ID");
-    }
-  }
+      newApplicantId = `PAT${lastId + 1}`;
 
-  module.exports = { generateApplicantId };
+      const existingApplicant = await ApplicantModel.findOne({ 'profile.userId': newApplicantId });
+      if (!existingApplicant) {
+        unique = true;
+      }
+    }
+    return newApplicantId;
+  } catch (err) {
+    throw new ErrorResponse("Error generating applicant ID", 400);
+  }
+}
+
+module.exports = { generateApplicantId };

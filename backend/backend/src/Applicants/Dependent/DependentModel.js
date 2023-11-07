@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const dependentSchema = new mongoose.Schema({
   profile: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user' 
+    ref: "user",
   },
   relationId: {
     type: String,
@@ -24,4 +24,4 @@ const dependentSchema = new mongoose.Schema({
 });
 
 const Dependent = mongoose.model("Dependent", dependentSchema);
-module.exports = Dependent;
+module.exports = { Dependent };
