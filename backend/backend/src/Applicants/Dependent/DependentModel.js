@@ -17,10 +17,6 @@ const dependentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  age: {
-    type: Number,
-    required: true,
-  },
 });
 
 const Dependent = mongoose.model("Dependent", dependentSchema);

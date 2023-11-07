@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
+    profilePic: {
+      type: String,
+      required: true
+    },
     firstName: {
       type: String,
       required: true,
@@ -26,7 +30,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-
+    age: {
+      type: Number,
+      required: true,
+    },
     mobileNo: {
       type: String,
       required: true,

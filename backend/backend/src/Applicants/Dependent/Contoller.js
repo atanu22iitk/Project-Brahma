@@ -22,8 +22,7 @@ class DependentController {
       if (
         !dependentData.relationId ||
         !dependentData.relation ||
-        !dependentData.verificationId ||
-        !dependentData.age
+        !dependentData.verificationId 
       ) {
         return next(
           new ErrorResponse("Dependent all fields must required", 400)
@@ -41,7 +40,6 @@ class DependentController {
         relationId: dependentData.relationId,
         relation: dependentData.relation,
         verificationId: dependentData.verificationId,
-        age: dependentData.age,
       });
 
       await newDependent.save();

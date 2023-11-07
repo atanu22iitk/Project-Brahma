@@ -14,10 +14,6 @@ const applicantSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  age: {
-    type: Number,
-    required: true,
-  },
   parentService: {
     type: String,
     required: true,

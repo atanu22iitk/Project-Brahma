@@ -20,7 +20,6 @@ class ApplicantController {
       if (
         !applicantData.serviceNo ||
         !applicantData.rank ||
-        !applicantData.age ||
         !applicantData.parentService ||
         !applicantData.presentUnit ||
         !applicantData.nextOfKin
@@ -38,7 +37,6 @@ class ApplicantController {
       const newApplicant = await ApplicantModel({
         profile: userDetails,
         rank: applicantData.rank,
-        age: applicantData.age,
         parentService: applicantData.parentService,
         presentUnit: applicantData.presentUnit,
         nextOfKin: applicantData.nextOfKin,
