@@ -58,30 +58,35 @@ const registerUser = async (id, userData) => {
 
 const updateUser = async (id, userData) => {
   try {
-    if (
-      userData.mobileNo ||
-      userData.mailId ||
-      userData.age ||
-      userData.password ||
-      userData.confirmPassword
-    ) {
-      if (userData.password !== userData.confirmPassword) {
+    const user = await UserModel.findOne({ userId: id });
+    if (!user) return new ErrorResponse("User not found", 400);
+
+    const updates = {};
+    if (userData.age) updates.age = userData.age;
+    if (userData.mobileNo) updates.mobileNo = userData.mobileNo;
+    if (userData.mailId) updates.mailId = userData.mailId;
+
+    if (userData.password || userData.confirmPassword) {
+      if (
+        !userData.password ||
+        !userData.confirmPassword ||
+        userData.password !== userData.confirmPassword
+      ) {
         return new ErrorResponse(
-          "Password and Confirm Password must be same",
+          "Password and Confirm Password must be provided and match",
           400
         );
       }
-      const user = await UserModel.findOne({ userId: id });
-      if (!user) return new ErrorResponse("User not found", 400);
-
-      const hashedPassword = await generateHash(userData.password);
-      if (!hashedPassword || hashedPassword == "") {
-        return new ErrorResponse("Error while genrating hash password", 400);
-      }
+      updates.password = await generateHash(userData.password);
     }
+
+    await UserModel.updateOne({ userId: id }, { $set: updates });
+
+    const updatedUser = await UserModel.findOne({ userId: id });
+    return updatedUser;
   } catch (err) {
     if (!(err instanceof ErrorResponse)) {
-      err = new ErrorResponse("Error while creating user", 400);
+      err = new ErrorResponse("Error while updating user", 400);
     }
     throw err;
   }
