@@ -5,8 +5,8 @@ const JWT_KEY = process.env.JWT_SECRET_KEY ;
 
 
 // Function to generate JWT access token
-const generateAccessToken = async (id, userType, role) => {
-  if ((userType === "DOCTOR" || userType === "STAFF") && !role) {
+const generateAccessToken = async (id, userType, roles = {}) => {
+  if ((userType === 3 || userType === 4) && Object.keys(roles).length === 0) {
     throw new Error("Role is required for doctors and staff");
   }
 
@@ -14,8 +14,8 @@ const generateAccessToken = async (id, userType, role) => {
 const payload = {
     'aud': id,
     userType,
-    'roles': role,
-    'exp': 1641923200
+    roles,
+    'exp': 604800
   };
   
   if (!payload) {
@@ -64,7 +64,7 @@ const verifyToken = async (req, res, next) => {
 
 // Function to generate JWT refresh access token
 const generateRefreshToken = async (id, userType, roles = {}) => {
-  if ((userType === "DOCTOR" || userType === "STAFF") && !roles) {
+  if ((userType === 3 || userType === 4) && Object.keys(roles).length === 0) {
     throw new ErrorResponse("Role is required for doctors and staff");
   }
 
@@ -72,7 +72,7 @@ const generateRefreshToken = async (id, userType, roles = {}) => {
     sub: id,
     userType,
     roles,
-    'exp': 16419232000000
+    'exp': 2628000
   };
   if (!payload) {
     throw new ErrorResponse(

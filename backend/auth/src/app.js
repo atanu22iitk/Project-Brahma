@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const DoctorRoutes = require("./Doctor/Routes")
+const UserRoutes = require("./User/Routes")
 
-app.use('/doctor', DoctorRoutes);
+app.use('/user', UserRoutes);
 
 module.exports = app;
