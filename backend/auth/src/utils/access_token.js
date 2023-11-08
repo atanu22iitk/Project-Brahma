@@ -45,7 +45,6 @@ const payload = {
 // Function to verify JWT access token
 const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
-  console.log("verifyToken", verifyToken);
 
   if (typeof authHeader !== "undefined") {
     const bearerToken = authHeader.split(" ")[1];
