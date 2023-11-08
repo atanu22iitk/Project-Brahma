@@ -114,6 +114,33 @@ class UserController {
   };
 
   /**
+   * Deletes an existing user from the database.
+   * @param {String} id - The unique identifier for the user to be deleted.
+   * @returns {Object} The result of the deletion operation.
+   * @throws {ErrorResponse} When the user is not found or the deletion fails.
+   */
+  static deleteUser = async (id) => {
+    try {
+      const user = await UserModel.findOne({ userId: id });
+      if (!user) {
+        throw new ErrorResponse("User not found", 404);
+      }
+
+      const deletionResult = await UserModel.deleteOne({ userId: id });
+      if (deletionResult.deletedCount === 1) {
+        return { status: true, message: "User successfully deleted" };
+      } else {
+        throw new ErrorResponse("Error while deleting user", 400);
+      }
+    } catch (err) {
+      if (!(err instanceof ErrorResponse)) {
+        throw new ErrorResponse("Error while deleting user", 400);
+      }
+      throw err;
+    }
+  };
+
+  /**
    * Retrieves a user by their unique identifier.
    * @param {String} userId - The unique identifier for the user to retrieve.
    * @returns {Object} The user object if found.

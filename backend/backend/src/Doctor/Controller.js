@@ -1,9 +1,14 @@
 const ErrorResponse = require("../Middlewares/errorHandler");
 const { DoctorModel } = require("./Model");
 const { generateDoctorId } = require("./Utils");
-const { UserController } = require("../User/Controller");
+const UserController = require("../User/Controller");
+const { UserModel } = require("../User/Model");
 
 class DoctorController {
+  /**
+   * Register a new Doctor
+   * @throws {ErrorResponse} When the user is not found.
+   */
   static registerDoctor = async (req, res, next) => {
     try {
       const { userData, doctorData } = req.body;
@@ -55,6 +60,10 @@ class DoctorController {
     }
   };
 
+  /**
+   * Update a Doctor
+   * @throws {ErrorResponse} When the user is not found.
+   */
   static updateDoctor = async (req, res, next) => {
     try {
       const { doctorId, doctorData, userData } = req.body;
@@ -88,6 +97,32 @@ class DoctorController {
       res.send(200).json({
         success: true,
         data: { updatedDoctor },
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  /**
+   * Delete a doctor
+   * @throws {ErrorResponse} When the user is not found.
+   */
+  static deleteDoctor = async (req, res, next) => {
+    try {
+      const { doctorId } = req.body;
+      const user = await UserController.getUserById(doctorId);
+
+      const doctor = await DoctorModel.findOneAndDelete({ profile: user._id });
+      if (!doctor) return next(new ErrorResponse("Doctor not found", 400));
+
+      const deleteDoctor = await UserController.deleteUser(doctorId);
+      if(!deleteDoctor.status){
+        return next(new ErrorResponse("Error while deleting user", 400));
+      }
+      
+      res.send(200).json({
+        success: true,
+        data: `${doctorId} deleted successfully`,
       });
     } catch (err) {
       next(err);
