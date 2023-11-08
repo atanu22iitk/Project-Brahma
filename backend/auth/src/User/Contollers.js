@@ -58,7 +58,8 @@ class UserAuthController {
    */
   static verifyLogin = async (req, res, next) => {
     try {
-      const { id, otp } = req.body;
+      const id = req.params.id;
+      const { otp } = req.body;
       if (!otp) return next(new ErrorResponse("Otp must be required", 400));
 
       const user = await UserModel.findOne({ userId: id });
