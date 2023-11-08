@@ -1,14 +1,15 @@
 const ErrorResponse = require("../Middlewares/errorHandler");
 const { UserModel } = require("../User/Model");
 const { generateHash } = require("../Utils/hash");
+const { UserStatus } = require("./Utils");
 
 class UserController {
   /**
- * Registers a new user in the system.
- * @param {String} id - The unique identifier for the user.
- * @param {Object} userData - The data for the new user to be registered.
- * @returns {Object} The newly created user object.
- */
+   * Registers a new user in the system.
+   * @param {String} id - The unique identifier for the user.
+   * @param {Object} userData - The data for the new user to be registered.
+   * @returns {Object} The newly created user object.
+   */
   static registerUser = async (id, userData) => {
     try {
       if (
@@ -64,11 +65,11 @@ class UserController {
   };
 
   /**
- * Updates the details of an existing user.
- * @param {String} id - The unique identifier for the user.
- * @param {Object} userData - The updated data for the user.
- * @returns {Boolean} True if the update was successful.
- */
+   * Updates the details of an existing user.
+   * @param {String} id - The unique identifier for the user.
+   * @param {Object} userData - The updated data for the user.
+   * @returns {Boolean} True if the update was successful.
+   */
   static updateUser = async (id, userData) => {
     try {
       const user = await UserModel.findOne({ userId: id });
@@ -113,11 +114,11 @@ class UserController {
   };
 
   /**
- * Retrieves a user by their unique identifier.
- * @param {String} userId - The unique identifier for the user to retrieve.
- * @returns {Object} The user object if found.
- * @throws {ErrorResponse} When the user is not found.
- */
+   * Retrieves a user by their unique identifier.
+   * @param {String} userId - The unique identifier for the user to retrieve.
+   * @returns {Object} The user object if found.
+   * @throws {ErrorResponse} When the user is not found.
+   */
   static getUserById = async (userId) => {
     try {
       const user = await UserModel.findOne({ userId: userId });
@@ -134,10 +135,10 @@ class UserController {
   };
 
   /**
- * Retrieves all users from the system.
- * @returns {Array} An array of all user objects.
- * @throws {ErrorResponse} When there is an error retrieving users.
- */
+   * Retrieves all users from the system.
+   * @returns {Array} An array of all user objects.
+   * @throws {ErrorResponse} When there is an error retrieving users.
+   */
   static getAllUsers = async () => {
     try {
       const users = await UserModel.find({});
@@ -148,11 +149,11 @@ class UserController {
   };
 
   /**
- * Retrieves users by their type.
- * @param {Number} userType - The type of users to retrieve.
- * @returns {Array} An array of user objects of the specified type.
- * @throws {ErrorResponse} When no users are found for the given type or there is an error during retrieval.
- */
+   * Retrieves users by their type.
+   * @param {Number} userType - The type of users to retrieve.
+   * @returns {Array} An array of user objects of the specified type.
+   * @throws {ErrorResponse} When no users are found for the given type or there is an error during retrieval.
+   */
   static getUsersByType = async (userType) => {
     try {
       const users = await UserModel.find({ userType: userType });
@@ -167,6 +168,45 @@ class UserController {
       throw err;
     }
   };
+
+  /**
+   * Retrieves all registration IDs from the system.
+   * @returns {Array} An array of registration IDs.
+   * @throws {ErrorResponse} When there is an error retrieving registration IDs.
+   */
+  static getAllRegistrationIds = async () => {
+    try {
+      // select only userId field
+      const users = await UserModel.find({}, "userId");
+      return users.map((user) => user.userId);
+    } catch (err) {
+      throw new ErrorResponse("Error retrieving registration IDs", 400);
+    }
+  };
+
+  /**
+   * Approves a user's registration.
+   * @param {String} userId - The unique identifier for the user to approve.
+   * @returns {Object} The updated user object.
+   * @throws {ErrorResponse} When the user is not found or the update fails.
+   */
+  static approveUser = async (userId) => {
+    try {
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { userId, status: UserStatus.PENDING },
+        { status: UserStatus.APPROVED },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        throw new ErrorResponse("User not found or not pending approval", 400);
+      }
+
+      return updatedUser;
+    } catch (err) {
+      throw new ErrorResponse("Error approving user", 400);
+    }
+  };
 }
 
-module.exports = UserController ;
+module.exports = UserController;
