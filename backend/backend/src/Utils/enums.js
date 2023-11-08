@@ -1,5 +1,3 @@
-
-
 const Roles = {
   SENIOR_DOCTOR: 1,
   JUNIOR_DOCTOR: 2,
@@ -36,4 +34,4 @@ const LAB_TEST_TYPE = {
   LUMBAR_PUNCTURE: 24, // SPINAL TAP
 };
 
-module.exports = { Roles, UserType, LAB_TEST_TYPE, StaffUserType };
+module.exports = { Roles, LAB_TEST_TYPE };

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const { UserType, Gender, UserStatus } = require("./Utils");
+const { UserType, Gender, UserStatus, FileType } = require("./Utils");
+const ErrorResponse = require("../Middlewares/errorHandler");
 
 const userSchema = new mongoose.Schema({
   userType: {
@@ -13,7 +14,11 @@ const userSchema = new mongoose.Schema({
   },
   profilePic: {
     type: String,
-    required: true,
+    validate: {
+      validator: validateProfilePicFileType,
+      message: (props) =>
+        `The file type for ${props.value} is not supported. Only PDF, JPG, JPEG, and PNG are allowed.`,
+    },
   },
   firstName: {
     type: String,
@@ -36,6 +41,12 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
     enum: Object.values(Gender),
+    validate: {
+      validator: function (v) {
+        return validateGender(v);
+      },
+      message: (props) => `${props.value} is not a valid gender`,
+    },
   },
   mobileNo: {
     type: Number,
@@ -127,6 +138,23 @@ function validatePassword(password) {
   const strongPasswordRegex =
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
   return strongPasswordRegex.test(password);
+}
+
+function validateGender(value) {
+  if (value !== "MALE" || value !== "FEMALE" || value !== "OTHERS") {
+    return new ErrorResponse("Gender must be MALE, FEMALE or OTHERS");
+  }
+}
+
+function validateProfilePicFileType(filePath) {
+  const allowedExtensions = [
+    FileType.PDF,
+    FileType.JPG,
+    FileType.JPEG,
+    FileType.PNG,
+  ];
+  const extension = filePath.split(".").pop().toLowerCase();
+  return allowedExtensions.includes(extension);
 }
 
 const UserModel = mongoose.model("user", userSchema);

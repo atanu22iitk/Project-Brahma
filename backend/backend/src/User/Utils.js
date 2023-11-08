@@ -24,6 +24,10 @@ class Gender {
   static get FEMALE() {
     return 2;
   }
+
+  static get OTHERS() {
+    return 3;
+  }
 }
 
 class UserStatus {
@@ -44,4 +48,22 @@ class UserStatus {
   }
 }
 
-module.exports = { UserType, Gender, UserStatus };
+class FileType {
+  static get PDF() {
+    return 1;
+  }
+
+  static get JPG() {
+    return 2;
+  }
+
+  static get JPEG() {
+    return 3;
+  }
+
+  static get PNG() {
+    return 4;
+  }
+}
+
+module.exports = { UserType, Gender, UserStatus, FileType };
