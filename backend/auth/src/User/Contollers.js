@@ -81,7 +81,7 @@ class UserAuthController {
 
       const userRoles =
         userJSON.userType === 3 || userJSON.userType === 4
-          ? doctorJSON.roles
+          ? doctorJSON.roles || staffJSON.roles
           : [];
       const token = await generateAccessToken(
         userJSON.userId,
