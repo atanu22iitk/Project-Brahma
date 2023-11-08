@@ -1,7 +1,7 @@
 const ErrorResponse = require("../Middlewares/errorHandler");
 const { DoctorModel } = require("./Model");
 const { generateDoctorId } = require("./Utils");
-const { registerUser, updateUser } = require("../User/Controller");
+const { UserController } = require("../User/Controller");
 
 class DoctorController {
   static registerDoctor = async (req, res, next) => {
@@ -11,7 +11,7 @@ class DoctorController {
       const doctorId = await generateDoctorId();
       let userDetails;
       try {
-        userDetails = await registerUser(doctorId, userData);
+        userDetails = await UserController.registerUser(doctorId, userData);
       } catch (err) {
         next(
           new ErrorResponse("Error received while return user details", 400)
@@ -59,14 +59,14 @@ class DoctorController {
     try {
       const { doctorId, doctorData, userData } = req.body;
 
-      const doctor = await DoctorModel.findOne({ "profile.userId": doctorId });
-      if (!doctor) return next(new ErrorResponse("Doctor not found", 400));
-
-      const user = await updateUser(doctorId, userData);
+      const user = await UserController.updateUser(doctorId, userData);
       if (!user)
         return next(
           new ErrorResponse("Error while updating user details", 400)
         );
+
+      const doctor = await DoctorModel.findOne({ profile: user._id });
+      if (!doctor) return next(new ErrorResponse("Doctor not found", 400));
 
       const updates = {};
       if ("rank" in doctorData) updates.rank = doctorData.rank;
@@ -74,7 +74,7 @@ class DoctorController {
         updates.presentUnit = doctorData.presentUnit;
 
       const updateResult = await DoctorModel.updateOne(
-        { doctorId: doctorId },
+        { profile: user._id },
         { $set: updates }
       );
       if (updateResult.nModified === 0) {
@@ -84,7 +84,7 @@ class DoctorController {
         );
       }
 
-      const updatedDoctor = await DoctorModel.findOne({ doctorId: doctorId });
+      const updatedDoctor = await DoctorModel.findOne({ profile: user._id });
       res.send(200).json({
         success: true,
         data: { updatedDoctor },
