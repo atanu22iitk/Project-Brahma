@@ -48,12 +48,20 @@ const labTestSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.objectId,
     ref: "staff",
   },
-  testType: {
+  testCategory: {
     type: Number,
     required: true,
     enum: Object.values(LAB_TEST_TYPE),
   },
+  testType: {
+    type: String,
+    required: true,
+  },
   reportDetails: {
+    type: String,
+    required: true,
+  },
+  department: {
     type: String,
     required: true,
   },
