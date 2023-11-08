@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Roles = require("../Utils/enums");
+const {StaffUserType} = require("./Utils");
 
 const MedicalStaffSchema = new mongoose.Schema({
   profile: {
@@ -10,7 +10,7 @@ const MedicalStaffSchema = new mongoose.Schema({
     {
       type: Number,
       required: true,
-      enum: Object.values(Roles),
+      enum: Object.values(StaffUserType),
     },
   ],
   serviceNo: {
@@ -29,29 +29,5 @@ const MedicalStaffSchema = new mongoose.Schema({
   },
 });
 
-const StaffAssignmentSchema = new mongoose.Schema({
-  staffId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "MedicalStaff",
-    required: true,
-  },
-  patientId: {
-    type: String,
-    required: true,
-  },
-  patientStaffICard: {
-    type: String,
-    required: true,
-  },
-  isDeregister: {
-    type: Boolean,
-    required: false,
-  },
-});
-
 const MedicalStaffModel = mongoose.model("staff", MedicalStaffSchema);
-const StaffAssignedModel = mongoose.model(
-  "staffAssign",
-  StaffAssignmentSchema
-);
-module.exports = { MedicalStaffModel, StaffAssignedModel };
+module.exports = { MedicalStaffModel };

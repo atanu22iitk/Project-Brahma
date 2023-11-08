@@ -1,7 +1,7 @@
 const ErrorResponse = require("../Middlewares/errorHandler");
 const { DoctorModel } = require("./Model");
 const { generateDoctorId } = require("./Utils");
-const { registerUser } = require("../User/Controller");
+const { registerUser, updateUser } = require("../User/Controller");
 
 class DoctorController {
   static registerDoctor = async (req, res, next) => {
@@ -49,6 +49,45 @@ class DoctorController {
       res.status(200).json({
         success: true,
         data: { newDoctor },
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  static updateDoctor = async (req, res, next) => {
+    try {
+      const { doctorId, doctorData, userData } = req.body;
+
+      const doctor = await DoctorModel.findOne({ "profile.userId": doctorId });
+      if (!doctor) return next(new ErrorResponse("Doctor not found", 400));
+
+      const user = await updateUser(doctorId, userData);
+      if (!user)
+        return next(
+          new ErrorResponse("Error while updating user details", 400)
+        );
+
+      const updates = {};
+      if ("rank" in doctorData) updates.rank = doctorData.rank;
+      if ("presentUnit" in doctorData)
+        updates.presentUnit = doctorData.presentUnit;
+
+      const updateResult = await DoctorModel.updateOne(
+        { doctorId: doctorId },
+        { $set: updates }
+      );
+      if (updateResult.nModified === 0) {
+        throw new ErrorResponse(
+          "Update failed, doctor details not modified",
+          400
+        );
+      }
+
+      const updatedDoctor = await DoctorModel.findOne({ doctorId: doctorId });
+      res.send(200).json({
+        success: true,
+        data: { updatedDoctor },
       });
     } catch (err) {
       next(err);

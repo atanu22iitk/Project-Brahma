@@ -1,3 +1,5 @@
+
+
 const Roles = {
   SENIOR_DOCTOR: 1,
   JUNIOR_DOCTOR: 2,
@@ -5,18 +7,6 @@ const Roles = {
   JUNIOR_STAFF: 4,
   LABORATORY: 5,
   PHARMACY: 6,
-};
-const USER_TYPE = {
-  APPLICANT: 1,
-  DEPENDENT: 2,
-  DOCTOR: 3,
-  STAFF: 4,
-};
-
-const STAFF_USER_TYPE = {
-  PHARMACY: 1,
-  LABORATORY: 2,
-  RECEPTION: 3,
 };
 
 const LAB_TEST_TYPE = {
@@ -46,4 +36,4 @@ const LAB_TEST_TYPE = {
   LUMBAR_PUNCTURE: 24, // SPINAL TAP
 };
 
-module.exports = { Roles, USER_TYPE, LAB_TEST_TYPE, STAFF_USER_TYPE };
+module.exports = { Roles, UserType, LAB_TEST_TYPE, StaffUserType };

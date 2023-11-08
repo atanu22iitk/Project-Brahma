@@ -1,4 +1,18 @@
-const { MedicalStaffModel, StaffAssignedModel } = require("./Model.js");
+const { MedicalStaffModel } = require("./Model.js");
+
+class StaffUserType {
+  static get PHARMACY() {
+    return 1;
+  }
+
+  static get LABORATORY() {
+    return 2;
+  }
+
+  static get RECEPTION() {
+    return 3;
+  }
+} 
 
 async function generateStaffId() {
   try {
@@ -14,19 +28,4 @@ async function generateStaffId() {
   }
 }
 
-async function generateAssignedStaffId(staffId) {
-  try {
-    const staff = await MedicalStaffModel.findOne({ staffId: staffId });
-    const latestStaff = await StaffAssignedModel.findOne().sort({ _id: -1 });
-    let lastId = 0;
-    if (latestStaff && latestStaff.staffId) {
-      lastId = parseInt(latestStaff.staffId.replace(/[^\d]/g, "")) || 0;
-    }
-    return `${staff.staffId}NEW${lastId + 1}`;
-  } catch (err) {
-    console.error("Error generating assigned staff ID: ", err);
-    throw new Error("Error generating assigned staff ID");
-  }
-}
-
-module.exports = { generateStaffId, generateAssignedStaffId };
+module.exports = { generateStaffId, StaffUserType };

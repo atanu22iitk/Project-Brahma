@@ -62,11 +62,11 @@ const updateUser = async (id, userData) => {
     if (!user) return new ErrorResponse("User not found", 400);
 
     const updates = {};
-    if (userData.age) updates.age = userData.age;
-    if (userData.mobileNo) updates.mobileNo = userData.mobileNo;
-    if (userData.mailId) updates.mailId = userData.mailId;
+    if ("age" in userData) updates.age = userData.age;
+    if ("mobileNo" in userData) updates.mobileNo = userData.mobileNo;
+    if ("mailId" in userData) updates.mailId = userData.mailId;
 
-    if (userData.password || userData.confirmPassword) {
+    if ("password" in userData) {
       if (
         !userData.password ||
         !userData.confirmPassword ||
@@ -80,10 +80,15 @@ const updateUser = async (id, userData) => {
       updates.password = await generateHash(userData.password);
     }
 
-    await UserModel.updateOne({ userId: id }, { $set: updates });
+    const updatedUser = await UserModel.updateOne(
+      { userId: id },
+      { $set: updates }
+    );
+    if (updatedUser.nModified === 0) {
+      return next(new ErrorResponse("Error while updating user details", 400));
+    }
 
-    const updatedUser = await UserModel.findOne({ userId: id });
-    return updatedUser;
+    return true;
   } catch (err) {
     if (!(err instanceof ErrorResponse)) {
       err = new ErrorResponse("Error while updating user", 400);
