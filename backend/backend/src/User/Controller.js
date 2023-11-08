@@ -279,6 +279,25 @@ class UserController {
       throw new ErrorResponse("Error revoking suspension", 400);
     }
   };
+
+  /**
+   * Retrieves the IDs of all users with a pending status.
+   * @returns {Array} An array of user IDs with pending status.
+   * @throws {ErrorResponse} When there is an error retrieving the user IDs.
+   */
+  static getAllPendingUserIds = async () => {
+    try {
+      const pendingUsers = await UserModel.find(
+        { status: UserStatus.PENDING },
+        "userId"
+      );
+      const pendingUserIDs = pendingUsers.map((user) => user.userId);
+      return pendingUserIDs;
+    } catch (err) {
+      console.error("Error retrieving pending user IDs:", err);
+      throw new ErrorResponse("Error retrieving pending user IDs", 400);
+    }
+  };
 }
 
 module.exports = UserController;
