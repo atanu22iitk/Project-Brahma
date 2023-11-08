@@ -207,6 +207,78 @@ class UserController {
       throw new ErrorResponse("Error approving user", 400);
     }
   };
+
+  /**
+   * Rejects a user's registration.
+   * @param {String} userId - The unique identifier for the user to reject.
+   * @returns {Object} The updated user object.
+   * @throws {ErrorResponse} When the user is not found or the update fails.
+   */
+  static rejectUser = async (userId) => {
+    try {
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { userId, status: UserStatus.PENDING },
+        { status: UserStatus.REJECTED },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        throw new ErrorResponse("User not found or not pending approval", 400);
+      }
+
+      return updatedUser;
+    } catch (err) {
+      throw new ErrorResponse("Error rejecting user", 400);
+    }
+  };
+
+  /**
+   * Suspends a user's account.
+   * @param {String} userId - The unique identifier for the user to suspend.
+   * @returns {Object} The updated user object.
+   * @throws {ErrorResponse} When the user is not found or the update fails.
+   */
+  static suspendUser = async (userId) => {
+    try {
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { userId, status: { $ne: UserStatus.SUSPENDED } },
+        { status: UserStatus.SUSPENDED },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        throw new ErrorResponse("User not found or already suspended", 400);
+      }
+
+      return updatedUser;
+    } catch (err) {
+      throw new ErrorResponse("Error suspending user", 400);
+    }
+  };
+
+  /**
+   * Revokes suspension of a user's account.
+   * @param {String} userId - The unique identifier for the user to revoke suspension.
+   * @returns {Object} The updated user object.
+   * @throws {ErrorResponse} When the user is not found or the update fails.
+   */
+  static revokeSuspension = async (userId) => {
+    try {
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { userId, status: UserStatus.SUSPENDED },
+        { status: UserStatus.APPROVED },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        throw new ErrorResponse("User not found or not suspended", 400);
+      }
+
+      return updatedUser;
+    } catch (err) {
+      throw new ErrorResponse("Error revoking suspension", 400);
+    }
+  };
 }
 
 module.exports = UserController;
