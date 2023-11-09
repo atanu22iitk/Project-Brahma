@@ -6,10 +6,10 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
-  userData: {
+  profile: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
-  },
+  }],
   roles: {
     type: [Number],
     required: true,

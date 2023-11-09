@@ -2,7 +2,6 @@ const ErrorResponse = require("../Middlewares/errorHandler");
 const { DoctorModel } = require("./Model");
 const { generateDoctorId } = require("./Utils");
 const UserController = require("../User/Controller");
-const { UserModel } = require("../User/Model");
 
 class DoctorController {
   /**
@@ -14,7 +13,6 @@ class DoctorController {
       const { userData, doctorData } = req.body;
 
       const doctorId = await generateDoctorId();
-      console.log(doctorId);
       let userDetails;
       try {
         userDetails = await UserController.registerUser(doctorId, userData);
