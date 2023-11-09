@@ -6,14 +6,18 @@ const patientSchema = new mongoose.Schema(
       typeof: String,
       unique: true,
     },
-    ehrId: {
-      type: [String],
-      unique: true,
-    },
-    reportId: {
-      type: [String],
-      unique: true,
-    },
+    ehrId: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "prescriptionRecord",
+      },
+    ],
+    reportId: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "labTestRecord",
+      },
+    ],
   },
   { timestamps: true }
 );
