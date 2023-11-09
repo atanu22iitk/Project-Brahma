@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const dependentSchema = new mongoose.Schema({
+  patientId: {
+    type: String,
+    unique: true,
+  },
   profile: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",

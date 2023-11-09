@@ -14,9 +14,9 @@ class UserController {
     try {
       if (
         !userData.userType ||
-        !userData.profilePic ||
         !userData.firstName ||
         !userData.age ||
+        !userData.gender ||
         !userData.mobileNo ||
         !userData.mailId ||
         !userData.password ||
@@ -39,6 +39,7 @@ class UserController {
       if (user) return new ErrorResponse("User already exist", 400);
 
       const hashedPassword = await generateHash(userData.password);
+      console.log(userData.userType);
 
       const newUser = await UserModel({
         userType: userData.userType,
@@ -48,6 +49,7 @@ class UserController {
         middleName: userData.middleName,
         lastName: userData.lastName,
         age: userData.age,
+        gender: userData.gender,
         mobileNo: userData.mobileNo,
         mailId: userData.mailId,
         password: hashedPassword,
@@ -57,9 +59,6 @@ class UserController {
       await newUser.save();
       return newUser;
     } catch (err) {
-      if (!(err instanceof ErrorResponse)) {
-        err = new ErrorResponse("Error while creating user", 400);
-      }
       throw err;
     }
   };
@@ -146,16 +145,27 @@ class UserController {
    * @returns {Object} The user object if found.
    * @throws {ErrorResponse} When the user is not found.
    */
-  static getUserById = async (userId) => {
+  static getUserById = async (id, req, res, next) => {
     try {
+      let userId;
+      if (req.body.userId) {
+        userId = req.body.userId;
+      } else if (req.params.userId) {
+        userId = req.params.userId;
+      } else if (id) {
+        userId = id;
+      }
       const user = await UserModel.findOne({ userId: userId });
       if (!user) {
         throw new ErrorResponse("User not found", 404);
       }
-      return user;
+      res.status(200).json({
+        success: true,
+        data: { user },
+      });
     } catch (err) {
       if (!(err instanceof ErrorResponse)) {
-        throw new ErrorResponse("Error retrieving user", 400);
+        next(new ErrorResponse("Error retrieving user", 400));
       }
       throw err;
     }
@@ -166,10 +176,13 @@ class UserController {
    * @returns {Array} An array of all user objects.
    * @throws {ErrorResponse} When there is an error retrieving users.
    */
-  static getAllUsers = async () => {
+  static getAllUsers = async (req, res, next) => {
     try {
       const users = await UserModel.find({});
-      return users;
+      res.status(200).json({
+        success: true,
+        data: { users },
+      });
     } catch (err) {
       throw new ErrorResponse("Error retrieving users", 400);
     }
@@ -181,13 +194,23 @@ class UserController {
    * @returns {Array} An array of user objects of the specified type.
    * @throws {ErrorResponse} When no users are found for the given type or there is an error during retrieval.
    */
-  static getUsersByType = async (userType) => {
+  static getUsersByType = async (user_type, req, res, next) => {
     try {
-      const users = await UserModel.find({ userType: userType });
-      if (!users.length) {
-        throw new ErrorResponse("No users found for the given type", 404);
+      let userType;
+      if (req.body.userType) {
+        userType = req.body.userType;
+      } else if (req.params.userType) {
+        userType = req.params.userType;
+      } else if (user_type) {
+        userType = user_type;
       }
-      return users;
+      const users = await UserModel.find({ userType: userType });
+      const user = users ? users : [];
+
+      res.status(200).json({
+        success: true,
+        data: { user },
+      });
     } catch (err) {
       if (!(err instanceof ErrorResponse)) {
         throw new ErrorResponse("Error retrieving users by type", 400);
@@ -201,11 +224,15 @@ class UserController {
    * @returns {Array} An array of registration IDs.
    * @throws {ErrorResponse} When there is an error retrieving registration IDs.
    */
-  static getAllRegistrationIds = async () => {
+  static getAllRegistrationIds = async (req, res, next) => {
     try {
       // select only userId field
       const users = await UserModel.find({}, "userId");
-      return users.map((user) => user.userId);
+      const usersId = users.map((user) => user.userId);
+      res.status(200).json({
+        success: true,
+        data: { usersId },
+      });
     } catch (err) {
       throw new ErrorResponse("Error retrieving registration IDs", 400);
     }
@@ -312,14 +339,17 @@ class UserController {
    * @returns {Array} An array of user IDs with pending status.
    * @throws {ErrorResponse} When there is an error retrieving the user IDs.
    */
-  static getAllPendingUserIds = async () => {
+  static getAllPendingUserIds = async (req, res, next) => {
     try {
       const pendingUsers = await UserModel.find(
         { status: UserStatus.PENDING },
         "userId"
       );
       const pendingUserIDs = pendingUsers.map((user) => user.userId);
-      return pendingUserIDs;
+      res.status(200).json({
+        success: true,
+        data: { pendingUserIDs },
+      });
     } catch (err) {
       console.error("Error retrieving pending user IDs:", err);
       throw new ErrorResponse("Error retrieving pending user IDs", 400);

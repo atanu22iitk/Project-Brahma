@@ -14,13 +14,12 @@ class DoctorController {
       const { userData, doctorData } = req.body;
 
       const doctorId = await generateDoctorId();
+      console.log(doctorId);
       let userDetails;
       try {
         userDetails = await UserController.registerUser(doctorId, userData);
       } catch (err) {
-        next(
-          new ErrorResponse("Error received while return user details", 400)
-        );
+        return next(new ErrorResponse(err.message, 400));
       }
 
       if (
@@ -40,6 +39,7 @@ class DoctorController {
       if (doctor) return next(new ErrorResponse("Doctor already exist", 400));
 
       const newDoctor = await DoctorModel({
+        doctorId,
         profile: userDetails,
         roles: doctorData.roles,
         serviceNo: doctorData.serviceNo,
@@ -116,10 +116,10 @@ class DoctorController {
       if (!doctor) return next(new ErrorResponse("Doctor not found", 400));
 
       const deleteDoctor = await UserController.deleteUser(doctorId);
-      if(!deleteDoctor.status){
+      if (!deleteDoctor.status) {
         return next(new ErrorResponse("Error while deleting user", 400));
       }
-      
+
       res.send(200).json({
         success: true,
         data: `${doctorId} deleted successfully`,

@@ -4,7 +4,7 @@ const ErrorResponse = require("../Middlewares/errorHandler");
 
 const userSchema = new mongoose.Schema({
   userType: {
-    type: Number,
+    type: String,
     required: true,
     enum: Object.values(UserType),
   },
@@ -14,11 +14,7 @@ const userSchema = new mongoose.Schema({
   },
   profilePic: {
     type: String,
-    validate: {
-      validator: validateProfilePicFileType,
-      message: (props) =>
-        `The file type for ${props.value} is not supported. Only PDF, JPG, JPEG, and PNG are allowed.`,
-    },
+    required: true,
   },
   firstName: {
     type: String,
@@ -38,7 +34,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   gender: {
-    type: Number,
+    type: String,
     required: true,
     enum: Object.values(Gender),
     validate: {
@@ -51,7 +47,6 @@ const userSchema = new mongoose.Schema({
   mobileNo: {
     type: Number,
     required: true,
-    unique: true,
     validate: [
       {
         validator: function (v) {
@@ -61,15 +56,15 @@ const userSchema = new mongoose.Schema({
       },
       {
         validator: async function (mobileNo) {
-          if (this.userType === UserType.DEPENDENT) {
-            return true;
-          } else {
-            const count = await mongoose.models.User.countDocuments({
+          if (this.userType !== UserType.DEPENDENT) {
+            const count = await UserModel.countDocuments({
               mobileNo: mobileNo,
               _id: { $ne: this._id },
+              userType: { $ne: UserType.DEPENDENT },
             });
             return count === 0;
           }
+          return true;
         },
         message: (props) =>
           `The mobile number ${props.value} is already in use`,
@@ -79,6 +74,9 @@ const userSchema = new mongoose.Schema({
   mailId: {
     type: String,
     required: true,
+    unique: function () {
+      return this.userType !== UserType.DEPENDENT;
+    },
     validate: [
       {
         validator: function (v) {
@@ -88,15 +86,15 @@ const userSchema = new mongoose.Schema({
       },
       {
         validator: async function (email) {
-          if (this.userType === UserType.DEPENDENT) {
-            return true;
-          } else {
-            const count = await mongoose.models.User.countDocuments({
+          if (this.userType !== UserType.DEPENDENT) {
+            const count = await UserModel.countDocuments({
               mailId: email,
               _id: { $ne: this._id },
+              userType: { $ne: UserType.DEPENDENT },
             });
             return count === 0;
           }
+          return true;
         },
         message: (props) =>
           `The email address ${props.value} is already in use`,
@@ -115,8 +113,9 @@ const userSchema = new mongoose.Schema({
     },
   },
   status: {
-    type: Number,
+    type: String,
     default: UserStatus.PENDING,
+    enum: Object.values(UserStatus),
   },
   tc: {
     type: Boolean,

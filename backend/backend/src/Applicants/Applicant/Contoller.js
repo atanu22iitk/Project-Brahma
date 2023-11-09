@@ -2,6 +2,7 @@ const ErrorResponse = require("../../Middlewares/errorHandler");
 const { ApplicantModel } = require("./ApplicantModel");
 const { generateApplicantId } = require("./Utils");
 const { registerUser } = require("../../User/Controller");
+const { PatientModel } = require("../Model");
 
 class ApplicantController {
   static registerApplicant = async (req, res, next) => {
@@ -35,6 +36,7 @@ class ApplicantController {
         return next(new ErrorResponse("Applicant already exist", 400));
 
       const newApplicant = await ApplicantModel({
+        patientId: applicantId,
         profile: userDetails,
         rank: applicantData.rank,
         parentService: applicantData.parentService,
@@ -42,7 +44,12 @@ class ApplicantController {
         nextOfKin: applicantData.nextOfKin,
       });
 
+      const newPatient = await PatientModel({
+        patientId: applicantId,
+      });
+
       await newApplicant.save();
+      await newPatient.save();
 
       res.status(200).json({
         success: true,

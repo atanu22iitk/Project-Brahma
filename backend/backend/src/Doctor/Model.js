@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 const Roles = require("../Utils/enums");
 
 const doctorSchema = new mongoose.Schema({
-  profile: {
+  doctorId: {
+    type: String,
+    unique: true,
+  },
+  userData: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user' 
+    ref: "user",
   },
   roles: {
     type: [Number],

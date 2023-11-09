@@ -2,6 +2,7 @@ const ErrorResponse = require("../../Middlewares/errorHandler");
 const DependentModel = require("./DependentModel");
 const { generateDependentId } = require("./Utils");
 const { registerUser } = require("../../User/Controller");
+const { PatientModel } = require("../Model");
 
 class DependentController {
   static registerDependent = async (req, res, next) => {
@@ -22,7 +23,7 @@ class DependentController {
       if (
         !dependentData.relationId ||
         !dependentData.relation ||
-        !dependentData.verificationId 
+        !dependentData.verificationId
       ) {
         return next(
           new ErrorResponse("Dependent all fields must required", 400)
@@ -36,13 +37,19 @@ class DependentController {
         return next(new ErrorResponse("Dependent already exsits", 400));
 
       const newDependent = await DependentModel({
+        patientId: dependentId,
         profile: userDetails,
         relationId: dependentData.relationId,
         relation: dependentData.relation,
         verificationId: dependentData.verificationId,
       });
 
+      const newPatient = await PatientModel({
+        patientId: dependentId,
+      });
+
       await newDependent.save();
+      await newPatient.save();
       res.send(200).json({
         success: true,
         data: { newDependent },

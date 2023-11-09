@@ -1,5 +1,5 @@
-const DependentModel = require("./DependentModel");
 const ErrorResponse = require("../Middlewares/errorHandler");
+const { PatientModel } = require("../Model");
 
 async function generateDependentId() {
   try {
@@ -7,18 +7,17 @@ async function generateDependentId() {
     let newDependentId = "";
 
     while (!unique) {
-      const latestDependent = await DependentModel.findOne().sort({ _id: -1 });
+      const latestDependent = await PatientModel.findOne().sort({ _id: -1 });
       let lastId = 0;
-      if (latestDependent && latestDependent.profile.userId) {
-        lastId =
-          parseInt(latestDependent.profile.userId.replace(/[^\d]/g, "")) || 0;
+      if (latestDependent && latestDependent.patientId) {
+        lastId = parseInt(latestDependent.patientId.replace(/[^\d]/g, "")) || 0;
       }
-      newDependentId = `DEP${lastId + 1}`;
+      newDependentId = `PAT${lastId + 1}`;
 
-      const existingDependent = await DependentModel.findOne({
-        "profile.userId": newDependentId,
+      const existingDep = await PatientModel.findOne({
+        patientId: newDependentId,
       });
-      if (!existingDependent) {
+      if (!existingDep) {
         unique = true;
       }
     }

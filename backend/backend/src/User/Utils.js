@@ -1,69 +1,28 @@
-class UserType {
-  static get APPLICANT() {
-    return 1;
-  }
+const UserType = {
+  APPLICANT: "APPLICANT",
+  DEPENDENT: "DEPENDENT",
+  DOCTOR: "DOCTOR",
+  STAFF: "STAFF",
+};
 
-  static get DEPENDENT() {
-    return 2;
-  }
+const Gender = {
+  MALE: "MALE",
+  FEMALE: "FEMALE",
+  OTHERS: "OTHERS",
+};
 
-  static get DOCTOR() {
-    return 3;
-  }
+const UserStatus = {
+  PENDING: "PENDING",
+  APPROVE: "APPROVE",
+  REJECT: "REJECT",
+  SUSPENDED: "SUSPENDED",
+};
 
-  static get STAFF() {
-    return 4;
-  }
-}
-
-class Gender {
-  static get MALE() {
-    return 1;
-  }
-
-  static get FEMALE() {
-    return 2;
-  }
-
-  static get OTHERS() {
-    return 3;
-  }
-}
-
-class UserStatus {
-  static get PENDING() {
-    return 1;
-  }
-
-  static get APPROVE() {
-    return 2;
-  }
-
-  static get REJECT() {
-    return 3;
-  }
-
-  static get SUSPENDED() {
-    return 4;
-  }
-}
-
-class FileType {
-  static get PDF() {
-    return 1;
-  }
-
-  static get JPG() {
-    return 2;
-  }
-
-  static get JPEG() {
-    return 3;
-  }
-
-  static get PNG() {
-    return 4;
-  }
-}
+const FileType = {
+  PDF: "PDF",
+  JPG: "JPG",
+  JPEG: "JPEG",
+  PNG: "PNG",
+};
 
 module.exports = { UserType, Gender, UserStatus, FileType };
