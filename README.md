@@ -25,3 +25,27 @@
 
 Command for deploying chaincode
 ./brahma.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go -c brahmachannel
+
+### Procedure for adding an additional organisation in fabric-network
+1. download the file add_org3.zip folder.
+2. It contains two main folders - addOrg3 and org3-scripts
+3. Copy and paste addOrg3 folder under brahma-network/ and save the org3-scripts under scripts/.
+4. You need to add the following in envVar.sh
+export PEER0_ORG3_CA=${PWD}/organizations/peerOrganizations/org3.brahma.com/tlsca/tlsca.org3.brahma.com-cert.pem
+export PEER1_ORG3_CA=${PWD}/organizations/peerOrganizations/org3.brahma.com/tlsca/tlsca.org3.brahma.com-cert.pem
+6. In setGlobalsCLI:
+7. elif [ $USING_ORG -eq 3 ]; then
+    export CORE_PEER_ADDRESS=peer0.org3.brahma.com:11051 (Replace with actual port no)
+8. In setGlobals():
+   elif [ $USING_ORG -eq 3 ]; then
+    export CORE_PEER_LOCALMSPID="Org3MSP"
+    export CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG3_CA
+    export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org3.brahma.com/users/Admin@org3.brahma.com/msp
+    export CORE_PEER_ADDRESS=localhost:11051   (Replace with actual ID and port no)
+9. Do necessary changes also in deployCC.sh and in deployCCAAS.sh
+10. Do changes or add the code for anchor peer update in createAnchorPeerUpdate():
+    elif [ $ORG -eq 3 ]; then
+    HOST0="peer0.org3.brahma.com"
+    PORT0=11051 
+    HOST1="peer1.org3.brahma.com"
+    PORT1=11053
