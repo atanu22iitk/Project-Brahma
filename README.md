@@ -49,3 +49,6 @@ export PEER1_ORG3_CA=${PWD}/organizations/peerOrganizations/org3.brahma.com/tlsc
     PORT0=11051 
     HOST1="peer1.org3.brahma.com"
     PORT1=11053
+11. now you run below code to add org3 in brahma network
+    cd addOrg3/
+    ./addOrg3.sh -ca -c <channelName> -s couchdb
