@@ -106,10 +106,7 @@ services:
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for example map it to utilize Fauxton User Interface in dev environments.
     ports:
-      - "8984:5984"couchdb2
-couchdb2
-couchdb2
-couchdb2
+      - "8984:5984"
     networks:
       - brahma
   peer0.org3.brahma.com:
@@ -123,8 +120,6 @@ couchdb2
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
     depends_on:
       - couchdb2
-
-
   peer1.org3.brahma.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
