@@ -52,3 +52,7 @@ export PEER1_ORG3_CA=${PWD}/organizations/peerOrganizations/org3.brahma.com/tlsc
 11. now you run below code to add org3 in brahma network
     cd addOrg3/
     ./addOrg3.sh -ca -c <channelName> -s couchdb
+
+---------------------------------------------------------------------------------------------------------------------------------
+1. "brahma_netwrork_3_orgs" is an amended version of brahma netwrok with 3 ORGs and each Org with two peers each.
+2. Simply run the commands to execute.
