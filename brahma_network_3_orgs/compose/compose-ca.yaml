@@ -50,7 +50,6 @@ services:
     container_name: ca_org2
     networks:
       - brahma
-  #------------------CHanges------------------------
   ca_org3:
     image: hyperledger/fabric-ca:latest
     labels:
@@ -59,18 +58,37 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org3
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_PORT=8065
-      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:18065
+      - FABRIC_CA_SERVER_PORT=8056
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:18056
     ports:
-      - "8065:8065"
-      - "18065:18065"
+      - "8056:8056"
+      - "18056:18056"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/org3:/etc/hyperledger/fabric-ca-server
     container_name: ca_org3
     networks:
       - brahma
-  #---------------------------------------------
+  ca_org4:
+    image: hyperledger/fabric-ca:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-org4
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_PORT=8057
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:18057
+    ports:
+      - "8057:8057"
+      - "18057:18057"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ../organizations/fabric-ca/org4:/etc/hyperledger/fabric-ca-server
+    container_name: ca_org4
+    networks:
+      - brahma
+
   ca_orderer:
     image: hyperledger/fabric-ca:latest
     labels:
@@ -79,11 +97,11 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-orderer
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_PORT=8056
-      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:18056
+      - FABRIC_CA_SERVER_PORT=8058
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:18058
     ports:
-      - "8056:8056"
-      - "18056:18056"
+      - "8058:8058"
+      - "18058:18058"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
       - ../organizations/fabric-ca/ordererOrg:/etc/hyperledger/fabric-ca-server

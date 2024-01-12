@@ -50,13 +50,25 @@ CAPEM=organizations/peerOrganizations/org2.brahma.com/ca/ca.org2.brahma.com-cert
 
 echo "$(json_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org2.brahma.com/connection-org2.json
 echo "$(yaml_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org2.brahma.com/connection-org2.yaml
-#-----------------org3----------------- Changes-----------
+
+
 ORG=3
 P0PORT=9061
 P1PORT=9063
-CAPORT=8065
+CAPORT=8056
 PEERPEM=organizations/peerOrganizations/org3.brahma.com/tlsca/tlsca.org3.brahma.com-cert.pem
 CAPEM=organizations/peerOrganizations/org3.brahma.com/ca/ca.org3.brahma.com-cert.pem
 
 echo "$(json_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org3.brahma.com/connection-org3.json
-echo "$(yaml_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org2.brahma.com/connection-org3.yaml
+echo "$(yaml_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org3.brahma.com/connection-org3.yaml
+
+
+ORG=4
+P0PORT=9065
+P1PORT=9067
+CAPORT=8057
+PEERPEM=organizations/peerOrganizations/org4.brahma.com/tlsca/tlsca.org4.brahma.com-cert.pem
+CAPEM=organizations/peerOrganizations/org4.brahma.com/ca/ca.org4.brahma.com-cert.pem
+
+echo "$(json_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org4.brahma.com/connection-org4.json
+echo "$(yaml_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrganizations/org4.brahma.com/connection-org4.yaml

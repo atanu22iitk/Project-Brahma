@@ -56,7 +56,7 @@ services:
     volumes:
       - ./docker/peercfg:/etc/hyperledger/peercfg
       - ${DOCKER_SOCK}:/host/var/run/docker.sock
-  #------- CHanges made by me------
+
   peer0.org3.brahma.com:
     container_name: peer0.org3.brahma.com
     image: hyperledger/fabric-peer:latest
@@ -69,7 +69,6 @@ services:
     volumes:
       - ./docker/peercfg:/etc/hyperledger/peercfg
       - ${DOCKER_SOCK}:/host/var/run/docker.sock
-
   peer1.org3.brahma.com:
     container_name: peer1.org3.brahma.com
     image: hyperledger/fabric-peer:latest
@@ -82,7 +81,32 @@ services:
     volumes:
       - ./docker/peercfg:/etc/hyperledger/peercfg
       - ${DOCKER_SOCK}:/host/var/run/docker.sock
- #------------------------------------- 
+  
+  peer0.org4.brahma.com:
+    container_name: peer0.org4.brahma.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric_brahma
+    volumes:
+      - ./docker/peercfg:/etc/hyperledger/peercfg
+      - ${DOCKER_SOCK}:/host/var/run/docker.sock
+  peer1.org4.brahma.com:
+    container_name: peer1.org4.brahma.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric_brahma
+    volumes:
+      - ./docker/peercfg:/etc/hyperledger/peercfg
+      - ${DOCKER_SOCK}:/host/var/run/docker.sock
+
   cli:
     container_name: cli
     image: hyperledger/fabric-tools:latest
