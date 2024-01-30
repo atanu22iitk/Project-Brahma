@@ -23,7 +23,7 @@
 8. Please note we are using Hyperledger fabric with fabric-ca crypto tool and couchdb as state database for org ledgers and states to be saved.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Command for starting Brahma network
-./brahma.sh up createChannel -ca -c rajib -s couchdb
+./brahma.sh up createChannel -ca -c rajib -s couchdb.
 Command for deploying chaincode
 ./brahma.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go -c brahmachannel
 
