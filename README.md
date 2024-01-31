@@ -22,11 +22,9 @@
          ./brahma.sh up createChannel -ca -c <channel name of your choice> -s couchdb
 8. Please note we are using Hyperledger fabric with fabric-ca crypto tool and couchdb as state database for org ledgers and states to be saved.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
-Command for starting Brahma network
-./brahma.sh up createChannel -ca -c rajib -s couchdb.
-Command for deploying chaincode
-./brahma.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go -c brahmachannel
-
+1.Command for starting Brahma network  :   ./brahma.sh up createChannel -ca -c rajib -s couchdb.
+2.Command for deploying chaincode :  ./brahma.sh deployCC -ccn **basic - your chaincode name** -ccp ../asset-transfer-basic/chaincode-go -ccl go -c brahmachannel
+3. Command to invoke a chaincode : peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.brahma.com --tls --cafile "${PWD}/organizations/ordererOrganizations/brahma.com/orderers/orderer.brahma.com/msp/tlscacerts/tlsca.brahma.com-cert.pem" -C **put your ch name here** -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.brahma.com/peers/peer0.org1.brahma.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.brahma.com/peers/peer0.org2.brahma.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
 ### Procedure for adding an additional organisation in fabric-network
 1. download the file add_org3.zip folder.
 2. It contains two main folders - addOrg3 and org3-scripts
