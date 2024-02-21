@@ -1,2 +1,4 @@
-wallet
-!wallet/.gitkeep
+chaincode.env
+connection.json
+*.tar.gz
+*.tgz
