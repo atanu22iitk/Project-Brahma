@@ -1,0 +1,87 @@
+---
+name: brahma-network-org3
+version: 1.0.0
+client:
+  organization: Org3
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  Org3:
+    mspid: Org3MSP
+    peers:
+    - peer0.org3.brahma.com
+    - peer1.org3.brahma.com
+    certificateAuthorities:
+    - ca.org3.brahma.com
+peers:
+  peer0.org3.brahma.com:
+    url: grpcs://localhost:11051
+    tlsCACerts:
+      pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICKTCCAc+gAwIBAgIUXoQrw81v3GNzdkR86HdK4XJC0IIwCgYIKoZIzj0EAwIw
+          cTELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRAwDgYDVQQH
+          EwdSYWxlaWdoMRkwFwYDVQQKExBvcmczLmV4YW1wbGUuY29tMRwwGgYDVQQDExNj
+          YS5vcmczLmV4YW1wbGUuY29tMB4XDTI0MDIyOTExMDMwMFoXDTM5MDIyNTExMDMw
+          MFowcTELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRAwDgYD
+          VQQHEwdSYWxlaWdoMRkwFwYDVQQKExBvcmczLmV4YW1wbGUuY29tMRwwGgYDVQQD
+          ExNjYS5vcmczLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE
+          3i2nOH5GNsurkYKqU2aJHbmw5AHcqSBXZ3QStCy5i+PetKMCyRFCZHudamZAyjy4
+          gV4ZONxpjTq2zFtxayxh3aNFMEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQI
+          MAYBAf8CAQEwHQYDVR0OBBYEFLeB4/x80d0RB/hfLbZGIm5vaq7FMAoGCCqGSM49
+          BAMCA0gAMEUCIQDxvP/rhvnsgwgXE6NyfLj+d0flpSgWeSbhOx5j8f6Q5AIgGbMN
+          UbGU4bXIkYegUuFaR6WvjfPrgsX/wbcpB1phFFs=
+          -----END CERTIFICATE-----
+          
+    grpcOptions:
+      ssl-target-name-override: peer0.org3.brahma.com
+      hostnameOverride: peer0.org3.brahma.com
+
+  peer1.org3.brahma.com:
+    url: grpcs://localhost:11053
+    tlsCACerts:
+      pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICKTCCAc+gAwIBAgIUXoQrw81v3GNzdkR86HdK4XJC0IIwCgYIKoZIzj0EAwIw
+          cTELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRAwDgYDVQQH
+          EwdSYWxlaWdoMRkwFwYDVQQKExBvcmczLmV4YW1wbGUuY29tMRwwGgYDVQQDExNj
+          YS5vcmczLmV4YW1wbGUuY29tMB4XDTI0MDIyOTExMDMwMFoXDTM5MDIyNTExMDMw
+          MFowcTELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRAwDgYD
+          VQQHEwdSYWxlaWdoMRkwFwYDVQQKExBvcmczLmV4YW1wbGUuY29tMRwwGgYDVQQD
+          ExNjYS5vcmczLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE
+          3i2nOH5GNsurkYKqU2aJHbmw5AHcqSBXZ3QStCy5i+PetKMCyRFCZHudamZAyjy4
+          gV4ZONxpjTq2zFtxayxh3aNFMEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQI
+          MAYBAf8CAQEwHQYDVR0OBBYEFLeB4/x80d0RB/hfLbZGIm5vaq7FMAoGCCqGSM49
+          BAMCA0gAMEUCIQDxvP/rhvnsgwgXE6NyfLj+d0flpSgWeSbhOx5j8f6Q5AIgGbMN
+          UbGU4bXIkYegUuFaR6WvjfPrgsX/wbcpB1phFFs=
+          -----END CERTIFICATE-----
+          
+    grpcOptions:
+      ssl-target-name-override: peer1.org3.brahma.com
+      hostnameOverride: peer1.org3.brahma.com
+certificateAuthorities:
+  ca.org3.brahma.com:
+    url: https://localhost:11054
+    caName: ca-org3
+    tlsCACerts:
+      pem: 
+        - |
+          -----BEGIN CERTIFICATE-----
+          MIICKTCCAc+gAwIBAgIUXoQrw81v3GNzdkR86HdK4XJC0IIwCgYIKoZIzj0EAwIw
+          cTELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRAwDgYDVQQH
+          EwdSYWxlaWdoMRkwFwYDVQQKExBvcmczLmV4YW1wbGUuY29tMRwwGgYDVQQDExNj
+          YS5vcmczLmV4YW1wbGUuY29tMB4XDTI0MDIyOTExMDMwMFoXDTM5MDIyNTExMDMw
+          MFowcTELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRAwDgYD
+          VQQHEwdSYWxlaWdoMRkwFwYDVQQKExBvcmczLmV4YW1wbGUuY29tMRwwGgYDVQQD
+          ExNjYS5vcmczLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE
+          3i2nOH5GNsurkYKqU2aJHbmw5AHcqSBXZ3QStCy5i+PetKMCyRFCZHudamZAyjy4
+          gV4ZONxpjTq2zFtxayxh3aNFMEMwDgYDVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQI
+          MAYBAf8CAQEwHQYDVR0OBBYEFLeB4/x80d0RB/hfLbZGIm5vaq7FMAoGCCqGSM49
+          BAMCA0gAMEUCIQDxvP/rhvnsgwgXE6NyfLj+d0flpSgWeSbhOx5j8f6Q5AIgGbMN
+          UbGU4bXIkYegUuFaR6WvjfPrgsX/wbcpB1phFFs=
+          -----END CERTIFICATE-----
+          
+    httpOptions:
+      verify: false
