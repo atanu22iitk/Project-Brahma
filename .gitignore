@@ -1,0 +1,41 @@
+# Emacs backup files
+*~
+*#
+.#*
+# Vim file artifacts
+.*.sw*
+.DS_Store
+.project
+# omit Go vendor directories
+vendor/
+.vscode
+.gradle
+.idea
+# Dependency directories
+node_modules/
+# Ignore Gradle build output directory
+build
+package-lock.json
+
+# Eclipse
+.classpath
+.settings
+
+# installed Fabric binaries etc.
+bin/
+builders/
+config/
+external-chaincode/
+install-fabric.sh
+
+# override the ignore of all config/ folders
+!full-stack-asset-transfer-guide/infrastructure/sample-network/config
+
+brahma_network/addOrg3/fabric-ca/org3/msp
+brahma_network/addOrg3/fabric-ca/org3/ca-cert.pem
+brahma_network/addOrg3/fabric-ca/org3/fabric-ca-server.db
+brahma_network/addOrg3/fabric-ca/org3/IssuerPublicKey
+brahma_network/addOrg3/fabric-ca/org3/IssuerPublicKey
+brahma_network/addOrg3/fabric-ca/org3/IssuerRevocationPublicKey
+brahma_network/addOrg3/fabric-ca/org3/tls-cert.pem
+brahma_network/
