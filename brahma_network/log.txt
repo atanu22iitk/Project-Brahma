@@ -1,1 +1,0 @@
-[34m2024-02-29 19:38:01.640 IST 0001 INFO[0m [chaincodeCmd] [34;1mchaincodeInvokeOrQuery[0m -> Chaincode invoke successful. result: status:200 payload:"Ledger initialized with an array containing a single empty object" 

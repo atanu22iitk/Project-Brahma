@@ -10,9 +10,9 @@ const { Gateway, Wallets } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
-
 // In the main function we can also pass the organisation name as well
-async function main(orgName, hospId, channelName, contractName, functionName, patientId, doctorId, staffId, prescriptionId, department) {
+async function main(orgName, hospId, channelName, contractName, functionName, patientId, doctorId, ehrId) {
+
     try {
         // Get the current timestamp
         var timeDate = String(Date.now());
@@ -45,11 +45,12 @@ async function main(orgName, hospId, channelName, contractName, functionName, pa
         console.log('network:', network);
         // Get the contract from the network.
         const contract = network.getContract(contractName);
+        
 
         // Submit the specified transaction.
-        const resData = await contract.submitTransaction(`${functionName}`, `${patientId}`, `${doctorId}`, `${staffId}`, `${prescriptionId}`, `${department}`, `${hospId}`, `${timeDate}`);
+        const resData = await contract.submitTransaction(`${functionName}`, `${patientId}`, `${doctorId}`, `${ehrId}`, `${timeDate}`);
         //await contract.submitTransaction('initLedger', 'initialNullValues');
-        console.log(`Transaction has been submitted. Got "${resData.toString()}" , as data for the user`);
+        console.log(`shareEhrInfo Transaction has been submitted. Got the key as "${resData.toString()}" , save this key for future reference`);
 
         // Disconnect from the gateway.
         await gateway.disconnect();
@@ -59,6 +60,7 @@ async function main(orgName, hospId, channelName, contractName, functionName, pa
         process.exit(1);
     }
 }
-
-main(process.argv[2], process.argv[3], process.argv[4], process.argv[5], process.argv[6], process.argv[7], process.argv[8], process.argv[9], process.argv[10], process.argv[11]);
 module.exports.main = main;
+main(process.argv[2], process.argv[3], process.argv[4], process.argv[5], process.argv[6], process.argv[7], process.argv[8], process.argv[9]);
+// example for calling this function
+// node invoke.js B0000003 prabhu shareEhr addSharingInfo org1 B0000003 D00003 LR003

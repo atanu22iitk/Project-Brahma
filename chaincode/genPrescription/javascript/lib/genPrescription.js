@@ -4,7 +4,7 @@ const { Contract } = require('fabric-contract-api');
 
 class genPrescription extends Contract {
     async initLedger(ctx) {
-        const prescriptionDataStruct = {
+        const prescriptionData = {
             patientId: 'B1',
             doctorId: 'D1',
             staffId: 'S1',
@@ -13,37 +13,26 @@ class genPrescription extends Contract {
             hospId: 'Hosp1',
             timestamp: '29Feb:1500',
         };
-
-        const presDataArray = [Object.assign({}, prescriptionDataStruct)];
-        await ctx.stub.putState('presData', Buffer.from(JSON.stringify(presDataArray[0])));
-        return 'Ledger initialized with an array containing a single empty object';
+        await ctx.stub.putState('presData', Buffer.from(JSON.stringify(prescriptionData)));
+        return 'prescriptionData Ledger initialized, containing a single object with some initial values';
     }
 
     async updatePrescriptionData(ctx, patientId, doctorId, staffId, prescriptionId, department, hospId, timeDate) {
-        const dataArrayBytes = await ctx.stub.getState('presData');
-        if (!dataArrayBytes) {
+        const dataBytes = await ctx.stub.getState('presData');
+        if (!dataBytes) {
             throw new Error(`data on the key presData does not exist`);
         }
-        let presDataArray = JSON.parse(dataArrayBytes.toString());
-        // const presDataArray = [Object.assign({}, presDataString)];
-        // if (!presDataArray || presDataArray.length === 0) {
-        //     presDataArray.push({}); // Initialize with an empty object if array is empty
-        //     throw new Error('Array does not exist or has not been initialized');
-        // }
-        
-        // timeDate = timeDate.toLocaleString("en-US", { timeZoneName: 'short' });
-
-        // const lastObjIndex = presDataArray.length - 1;
-        presDataArray.patientId = patientId;
-        presDataArray.doctorId = doctorId;
-        presDataArray.staffId = staffId;
-        presDataArray.prescriptionId = prescriptionId;
-        presDataArray.department = department;
-        presDataArray.hospId = hospId;
-        presDataArray.timestamp = timeDate;
+        let prescriptionData = JSON.parse(dataBytes.toString());
+        prescriptionData.patientId = patientId;
+        prescriptionData.doctorId = doctorId;
+        prescriptionData.staffId = staffId;
+        prescriptionData.prescriptionId = prescriptionId;
+        prescriptionData.department = department;
+        prescriptionData.hospId = hospId;
+        prescriptionData.timestamp = timeDate;
 
         const key = patientId + '_' + timeDate;
-        await ctx.stub.putState(`${key}`, Buffer.from(JSON.stringify(presDataArray)));
+        await ctx.stub.putState(`${key}`, Buffer.from(JSON.stringify(prescriptionData)));
         return key;
     }
 
@@ -54,12 +43,21 @@ class genPrescription extends Contract {
             throw new Error(`Prescription data with key ${key} does not exist`);
         }
 
-        const prescriptionData = JSON.parse(prescriptionDataBytes.toString());
-        return prescriptionData;
+        let prescriptionData = JSON.parse(prescriptionDataBytes.toString());
+        if (!prescriptionData) {
+            throw new Error(`Prescription data with key ${key} does not exist`);
+        }else{
+            let ISTtime = new Date(Number(prescriptionData.timestamp))
+            let TimeStamp = ISTtime.toLocaleString("en-US", { timeZoneName: 'short', timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric', 
+            year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'});
+            prescriptionData.timestamp = TimeStamp;
+            return prescriptionData;
+        }
+
     }
 
     async checkUserExists(ctx, userId) {
-        const userKey = ctx.stub.createCompositeKey('user', [userId]);
+        const userKey = ctx.stub.createCompositeKey('client', [userId]);
         const userExists = await ctx.stub.getState(userKey);
 
         if (userExists && userExists.length > 0) {
