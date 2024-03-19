@@ -12,13 +12,17 @@
 ## Installation Procedure for Hyperledger Fabric in Ubuntu
 1. Please follow the installation guide given in the link https://dev.to/deadwin19/how-to-install-hyperledger-fabric-v24-on-ubuntu-2004-236f
 2. Make sure that you have installed latest Docker and Docker-Compose
-3. Follow the procedure to install fabric 2.4.4 and fabric-ca 1.5.3
-4. After running the installation command - Download the latest release of Fabric samples, docker images, and binaries.
+3. curl -fsSL https://get.docker.com | sudo sh -s -- --version=24.0.7
+4. sudo systemctl start docker
+5. sudo systemctl enable docker
+6. sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+7. Follow the procedure to install fabric 2.4.4 and fabric-ca 1.5.3
+8. After running the installation command - Download the latest release of Fabric samples, docker images, and binaries.
       curl -sSL https://bit.ly/2ysbOFE | bash -s
-5. Go to the directory called fabric-samples. Download the brahma-network and config-brahma folders given here in th repo and paste them inside fabric-samples directory.
-6. Go to the integrated terminal in VS Code or any code editor and move in the directory by
+9. Go to the directory called fabric-samples. Download the brahma-network and config-brahma folders given here in th repo and paste them inside fabric-samples directory.
+10. Go to the integrated terminal in VS Code or any code editor and move in the directory by
          cd fabric-samples/brahma_network/
-7. Then run the following command
+11. Then run the following command
          ./brahma.sh up createChannel -ca -c <channel name of your choice> -s couchdb
-8. Please note we are using Hyperledger fabric with fabric-ca crypto tool and couchdb as state database for org ledgers and states to be saved.
+12. Please note we are using Hyperledger fabric with fabric-ca crypto tool and couchdb as state database for org ledgers and states to be saved.
 
